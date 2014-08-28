@@ -1,5 +1,5 @@
 use utf8;
-package TwittElection::Schema;
+package Kinza::Schema;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -11,8 +11,8 @@ extends 'DBIx::Class::Schema';
 __PACKAGE__->load_namespaces;
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-27 19:55:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t35NasKaC74P3WvQbtxARA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ylgw0XM64uPIn2FonT7uAw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

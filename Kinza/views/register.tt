@@ -1,0 +1,14 @@
+[% IF error -%]
+<p class="error">[% error %]</p>
+[% END -%]
+<form method="POST">
+<p>Email address: <input name="email" value="[% session.email %]" /><br />
+Password: <input type="password" name="password" /><br />
+Password (again): <input type="password" name="password2" /><br />
+<input type="submit" value="Register" /></p>
+</form>
+[% USE Dumper %]
+<pre>
+[% Dumper.dump(session) -%]
+</pre>
+

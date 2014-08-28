@@ -1,12 +1,12 @@
 use utf8;
-package TwittElection::Schema::Result::Presentation;
+package Kinza::Schema::Result::Attendance;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-TwittElection::Schema::Result::Presentation
+Kinza::Schema::Result::Attendance
 
 =cut
 
@@ -32,11 +32,11 @@ extends 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
-=head1 TABLE: C<presentation>
+=head1 TABLE: C<attendance>
 
 =cut
 
-__PACKAGE__->table("presentation");
+__PACKAGE__->table("attendance");
 
 =head1 ACCESSORS
 
@@ -46,13 +46,13 @@ __PACKAGE__->table("presentation");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 course_id
+=head2 presentation_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 term_id
+=head2 student_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -63,9 +63,9 @@ __PACKAGE__->table("presentation");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "course_id",
+  "presentation_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "term_id",
+  "student_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
@@ -83,54 +83,39 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 attendances
-
-Type: has_many
-
-Related object: L<TwittElection::Schema::Result::Attendance>
-
-=cut
-
-__PACKAGE__->has_many(
-  "attendances",
-  "TwittElection::Schema::Result::Attendance",
-  { "foreign.presentation_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 course
+=head2 presentation
 
 Type: belongs_to
 
-Related object: L<TwittElection::Schema::Result::Course>
+Related object: L<Kinza::Schema::Result::Presentation>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "course",
-  "TwittElection::Schema::Result::Course",
-  { id => "course_id" },
+  "presentation",
+  "Kinza::Schema::Result::Presentation",
+  { id => "presentation_id" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-=head2 term
+=head2 student
 
 Type: belongs_to
 
-Related object: L<TwittElection::Schema::Result::Term>
+Related object: L<Kinza::Schema::Result::Student>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "term",
-  "TwittElection::Schema::Result::Term",
-  { id => "term_id" },
+  "student",
+  "Kinza::Schema::Result::Student",
+  { id => "student_id" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-27 19:55:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D6XBPXU89BAiymBrxAdLSA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sF7d8nPEDWFlmCrp1tdmOg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
