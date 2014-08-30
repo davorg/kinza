@@ -64,6 +64,12 @@ __PACKAGE__->table("student");
   is_nullable: 0
   size: 255
 
+=head2 verify
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -75,6 +81,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "password",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "verify",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -107,8 +115,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FlAKmxa4COYQdS7uLV8j2w
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-30 09:40:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HFxZigdFfORdN16KbKU9tg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
