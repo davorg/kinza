@@ -1,11 +1,27 @@
+<h1>Log in</h1>
 [% IF error -%]
 <p class="error">[% error %]</p>
 [% END -%]
 [% IF session.goto -%]
 <p>You need to be logged in to do that</p>
 [% END -%]
-<form method="POST" action="/login">
-<p>Email: <input name="email" value="[% session.email %]" /><br />
-Password: <input type="password" name="pass" /><br />
-<input type="submit" value="Log in" />
+<form class="form-horizontal" role="form" method="POST" action="/login">
+<div class="form-group">
+<label for="email" class="col-sm-2 control-label">Email:</label>
+<div class="col-sm-4">
+<input name="email" id="email" class="form-control" placeholder="email" value="[% session.email %]" />
+</div>
+</div>
+<div class="form-group">
+<label for="password" class="col-sm-2 control-label">Password:</label>
+<div class="col-sm-4">
+<input type="password" name="password" id="password" class="form-control" placeholder="password" />
+</div>
+</div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-4">
+      <button type="submit" class="btn btn-default">Log in</button>
+    </div>
+  </div>
 </form>
+
