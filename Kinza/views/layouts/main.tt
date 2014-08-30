@@ -21,7 +21,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">SCHS</a>
+      <a class="navbar-brand" href="/">SCHS Kinza 2014/15</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -39,8 +39,13 @@
   </div><!-- /.container-fluid -->
 </nav>
     <div class="container">
-      <div class="starter-template">
+      <div class="row">
+        <div class="col-sm-2 col-md-2 sidebar" style="background-color:#333">
+          <img src="/images/logo.png">
+        </div>
+        <div class="col-sm-7 col-sm-offset-1 col-md-8 col-md-offset-1 main">
 [% content %]
+        </div>
       </div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -49,3 +54,4 @@
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
+

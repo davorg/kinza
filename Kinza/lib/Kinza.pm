@@ -48,10 +48,8 @@ get '/register' => sub {
 };
 
 post '/register' => sub {
-    session 'email' => param('email');
     unless (param('email')
         and param('password') and param('password2')) {
-
         session 'error' => 'You must fill in all values';
         return redirect '/register';
     }
@@ -61,7 +59,7 @@ post '/register' => sub {
         return redirect '/register';
     }
 
-    if (my $user = $student_rs->single({
+    if (my $user = $student_rs->find({
         email => param('email'),
     })) {
         session 'error' => 'Email ' . $user->email .
@@ -127,7 +125,7 @@ get '/login' => sub {
 };
 
 post '/login' => sub {
-    session 'email' => params->{email};
+    session 'email' => undef;
     session 'name'  => undef;
 
     unless (params->{email} and params->{password}) {
