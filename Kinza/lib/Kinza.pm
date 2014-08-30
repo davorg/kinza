@@ -129,7 +129,7 @@ get '/login' => sub {
 post '/login' => sub {
     session 'user' => undef;
     session 'email' => params->{email};
-    unless (params->{email} and params->{pass}) {
+    unless (params->{email} and params->{password}) {
         session 'error' => 'Must give both email and password';
         return redirect '/login';
     }
@@ -142,7 +142,7 @@ post '/login' => sub {
         return redirect '/login';
     }
     
-    unless (passphrase(params->{pass})->matches($user->password)) {
+    unless (passphrase(params->{password})->matches($user->password)) {
         session 'error' => 'Invalid email or password';
         return redirect '/login';
     }
