@@ -2,7 +2,8 @@
 <p class="error">[% error %]</p>
 [% END -%]
 <form method="POST">
-<p>Email address: <input name="email" value="[% session.email %]" /><br />
+<p>Name: <input name="name" value="[% session.name %]" /><br />
+Email address: <input name="email" value="[% session.email %]" /><br />
 Password: <input type="password" name="password" /><br />
 Password (again): <input type="password" name="password2" /><br />
 <input type="submit" value="Register" /></p>

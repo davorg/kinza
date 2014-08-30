@@ -1,6 +1,7 @@
 package Kinza;
 use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
+use Dancer::Plugin::Email;
 use Dancer::Plugin::Passphrase;
 
 our $VERSION = '0.1';
@@ -13,6 +14,8 @@ $cfg->{DBIC}{default}{user}     = $ENV{KZ_USER};
 $cfg->{DBIC}{default}{password} = $ENV{KZ_PASS};
 
 my $student_rs = schema()->resultset('Student');
+my $term_rs    = schema()->resultset('Term');
+my $course_rs  = schema()->resultset('Course');
 
 my %private = map { $_ => 1 } qw[/submit];
 
@@ -30,7 +33,10 @@ hook before_template => sub {
 
 
 get '/' => sub {
-    template 'index';
+    template 'index', {
+      courses => [ $course_rs->all ],
+      terms   => [ $term_rs->all ],
+    };
 };
 
 get '/register' => sub {
@@ -63,12 +69,55 @@ post '/register' => sub {
         return redirect '/register';
     }
 
+    my $verify = passphrase->generate_random({
+        length  => 32,
+        charset => [ 'a' .. 'z', '0' .. '9' ],
+    });
     my $user = $student_rs->create({
-        email => param('email'),
-        password => passphrase(param('password'))->generate_hash,
+        name     => param('name'),
+        email    => param('email'),
+        password => passphrase(param('password'))->generate->rfc2307,
+        verify   => $verify,
     });
 
+    my $body = <<EO_EMAIL;
+
+Dear @{[$user->email]},
+
+Thank you for registering for Kinza 2014/15.
+
+Please click on the link below to verify your email address.
+
+@{[uri_for('/verify')]}/$verify
+
+EO_EMAIL
+
+    email {
+        from    => 'admin@cool-stuff.co.uk',
+        to      => $user->email,
+        subject => 'SCHS Kinza Verification',
+        body    => $body,
+    };
+
     template 'registered', { user => $user };
+};
+
+get '/verify/:code' => sub {
+    my $code = param('code');
+
+    my $student = $student_rs->find({
+        verify => $code,
+    });
+
+    if ($student) {
+        $student->update({
+            verify => undef,
+        });
+
+        template 'verified';
+    } else {
+        template 'unverified';
+    }
 };
 
 get '/login' => sub {

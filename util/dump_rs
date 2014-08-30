@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin;
+use lib "$FindBin::Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->connect(
+  'dbi:mysql:database=kinza', $ENV{KZ_USER}, $ENV{KZ_PASS},
+) or die "Can't connect to database";
+
+my $rs_name = shift or die "Must give name of resultset to save\n";
+
+my $rs = $sch->resultset($rs_name);
+my @columns = grep { $_ ne 'id' } $rs->result_source->columns;
+
+open my $rs_fh, '>', "$FindBin::Bin/../db_schema/$rs_name.tsv" or die $!;
+
+say $rs_fh join "\t", @columns;
+
+while (my $row = $rs->next) {
+  say $rs_fh join "\t", map { $row->$_ } @columns;
+}

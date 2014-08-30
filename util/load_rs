@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin;
+use lib "$FindBin::Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->connect(
+  'dbi:mysql:database=kinza', $ENV{KZ_USER}, $ENV{KZ_PASS},
+   { mysql_enable_utf8 => 1 },
+) or die "Can't connect to database";
+
+my $rs_name = shift or die "Must give name of resultset to load\n";
+
+my $rs = $sch->resultset($rs_name);
+
+open my $rs_fh, '<:encoding(UTF-8)', "$FindBin::Bin/../db_schema/$rs_name.tsv"
+  or die $!;
+
+chomp(my $cols = <$rs_fh>);
+my @columns = split /\t/, $cols;
+
+$sch->txn_do( sub {
+  $rs->delete;
+
+  while (<$rs_fh>) {
+    chomp;
+    my %row;
+    @row{@columns} = split /\t/;
+    foreach my $c (@columns) {
+      delete $row{$c} unless defined $row{$c};
+    }
+    $rs->create(\%row);
+  }
+} );
