@@ -28,7 +28,7 @@ hook before => sub {
 
 hook before_template => sub {
     my $params = shift;
-    $params->{user} = session('user');
+    $params->{email} = session('email');
 };
 
 
@@ -65,7 +65,7 @@ post '/register' => sub {
         email => param('email'),
     })) {
         session 'error' => 'Email ' . $user->email .
-            ' is already in registered.';
+            ' is already registered.';
         return redirect '/register';
     }
 
@@ -127,8 +127,9 @@ get '/login' => sub {
 };
 
 post '/login' => sub {
-    session 'user' => undef;
     session 'email' => params->{email};
+    session 'name'  => undef;
+
     unless (params->{email} and params->{password}) {
         session 'error' => 'Must give both email and password';
         return redirect '/login';
@@ -147,7 +148,8 @@ post '/login' => sub {
         return redirect '/login';
     }
     
-    session 'user' => $user->email;
+    session 'email' => $user->email;
+    session 'name'  => $user->name;
 
     if (my $goto = session('goto')) {
         session 'goto' => undef;
@@ -158,7 +160,8 @@ post '/login' => sub {
 };
 
 get '/logout' => sub {
-    session 'user' => undef;
+    session 'email' => undef;
+    session 'name'  => undef;
     redirect '/';
 };
 

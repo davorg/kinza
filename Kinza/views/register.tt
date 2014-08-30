@@ -1,6 +1,6 @@
 <h1>Register</h1>
 [% IF error -%]
-<p class="error">[% error %]</p>
+<p class="text-danger bg-danger">[% error %]</p>
 [% END -%]
 <form class="form-horizontal" role="form" method="POST" action="/register">
 <div class="form-group">
