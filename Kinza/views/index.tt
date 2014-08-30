@@ -15,7 +15,7 @@
 <tr>
 <td>[% c.title %]</td>
 [% FOREACH t IN terms -%]
-<td title="[% t.name %]">&nbsp;</td>
+<td title="[% t.name %]"><input type="radio" name="T[% t.seq %]" value="[% c.id %]"></td>
 [% END -%]
 </tr>
 [% END -%]
