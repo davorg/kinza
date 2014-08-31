@@ -16,6 +16,7 @@ $cfg->{DBIC}{default}{password} = $ENV{KZ_PASS};
 my $student_rs = schema()->resultset('Student');
 my $term_rs    = schema()->resultset('Term');
 my $course_rs  = schema()->resultset('Course');
+my $pres_rs    = schema()->resultset('Presentation');
 
 my %private = map { $_ => 1 } qw[/submit];
 
@@ -33,10 +34,66 @@ hook before_template => sub {
 
 
 get '/' => sub {
+    my $error = session('error');
+    session 'error' => undef;
+    my $choices = session('choices');
+    session 'choices' => undef;
+
+    if (!keys %$choices and session('email')) {
+        $choices = $student_rs->find({
+            email => session('email'),
+        })->choices;
+    }
+
     template 'index', {
+      error   => $error,
+      choices => $choices,
       courses => [ $course_rs->all ],
       terms   => [ $term_rs->all ],
     };
+};
+
+post '/save' => sub {
+    my %params = params;
+
+    session 'choices' => { reverse %params };
+
+    # Check that student has signed up for five terms
+    # And that all their courses are different
+    my $terms = 0;
+    my %courses;
+    foreach (keys %params) {
+      my $pres = $pres_rs->find({ id => $params{$_} });
+      $terms += $pres->course->number_of_terms;
+      $courses{$pres->course->id} = 1;
+    }
+
+    if ($terms != 5) {
+        session 'error' => 'You must register for five terms of courses';
+        redirect '/';
+    }
+
+    if (keys %courses != keys %params) {
+        session 'error' => 'You must register for a different course each term';
+        redirect '/';
+    }
+
+    # Save the data
+    my $student = $student_rs->find({
+        email => session('email'),
+    });
+
+    schema->txn_do(sub {
+        $student->attendances->delete;
+
+        foreach (keys %params) {
+            $student->add_to_attendances({
+                presentation_id => $params{$_},
+            });
+        }
+    });
+
+    template 'saved', { student => $student };
 };
 
 get '/register' => sub {

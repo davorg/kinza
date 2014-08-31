@@ -1,0 +1,9 @@
+<h1>Selections Saved</h1>
+<p>Your selections have been saved.</p>
+<ul>
+[% FOREACH a IN student.sorted_attendances -%]
+<li>[% a.presentation.term.name %] - [% a.presentation.course.title %]</li>
+[% END -%]
+</ul>
+
+<p>Return to the <a href="/">home page</a>.</p>

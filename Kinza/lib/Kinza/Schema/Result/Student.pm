@@ -118,6 +118,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-30 09:40:27
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HFxZigdFfORdN16KbKU9tg
 
+sub sorted_attendances {
+  my $self = shift;
+
+  return $self->attendances->search({}, {
+    join => { presentation => 'term' },
+    order_by => 'term.seq',
+  });
+}
+
+sub choices {
+  my $self = shift;
+
+  return { map { $_->presentation_id => 1 } $self->attendances };
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

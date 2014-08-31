@@ -55,24 +55,33 @@ __PACKAGE__->table("course");
 =head2 description
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 teacher
 
   data_type: 'varchar'
+  default_value: 'Mrs. Teacher'
   is_nullable: 0
   size: 255
 
 =head2 room
 
   data_type: 'varchar'
+  default_value: 'Room 101'
   is_nullable: 0
   size: 255
 
 =head2 capacity
 
   data_type: 'integer'
+  default_value: 20
   is_nullable: 0
+
+=head2 number_of_terms
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 1
 
 =cut
 
@@ -82,13 +91,25 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "description",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "teacher",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  {
+    data_type => "varchar",
+    default_value => "Mrs. Teacher",
+    is_nullable => 0,
+    size => 255,
+  },
   "room",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  {
+    data_type => "varchar",
+    default_value => "Room 101",
+    is_nullable => 0,
+    size => 255,
+  },
   "capacity",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", default_value => 20, is_nullable => 0 },
+  "number_of_terms",
+  { data_type => "integer", default_value => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -121,8 +142,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2E4UgQWHtzux4x4cm95Dag
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-31 11:46:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cGBbek8cHZozdr3HOA6U4w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
