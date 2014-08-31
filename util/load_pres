@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin;
+use lib "$FindBin::Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->connect(
+  'dbi:mysql:database=kinza', $ENV{KZ_USER}, $ENV{KZ_PASS},
+   { mysql_enable_utf8 => 1 },
+) or die "Can't connect to database";
+
+my $course_rs = $sch->resultset('Course');
+
+$sch->txn_do( sub {
+  while (my $course = $course_rs->next) {
+    if ($course->number_of_terms == 5) {
+      my $term = $sch->resultset('Term')->find({
+        seq => 1,
+      });
+      $course->add_to_presentations({
+        term_id => $term->id,
+      });
+    } else {
+      foreach my $term ($sch->resultset('Term')->all) {
+        $course->add_to_presentations({
+          term_id => $term->id,
+        });
+      }
+    }
+  }
+});
