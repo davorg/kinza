@@ -9,26 +9,37 @@
 [% END -%]
 <p>On this site, you can choose your Kinza courses for the coming year.</p>
 [% IF session.email -%]
+[%   IF student.verify -%]
+<p>You need to verify your email address before using this site.</p>
+<p>To verify your email address, click the link in the email we sent you.</p>
+<p>If you haven't received your email, please
+<a href="/resend">click here</a> and we will resend it.</p>
+[%   ELSE -%]
 <p>Here are your options:</p>
 <form method="POST" action="/save">
 <p><input type="submit" value="Save"></p>
 <table class="table table-striped table-bordered table-hover table-condensed">
 <thead>
 <th>Course</th>
-[% FOREACH t IN terms -%]
+[%     FOREACH t IN terms -%]
 <th title="[% t.name %]">T[% t.seq %]</th>
-[% END -%]
+[%     END -%]
 </thead>
-[% FOREACH c IN courses -%]
+[%     FOREACH c IN courses -%]
 <tr>
 <td>[% c.title %]</td>
-[% FOREACH p IN c.presentations -%]
-<td colspan=[% c.number_of_terms %] title="[% p.term.name %]"><input type="radio" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% END %]></td>
-[% END -%]
+[%       SET total_terms = terms.size;
+         FOREACH t IN terms;
+           SET count_of_terms = 0 -%]
+<td colspan=[% c.number_of_terms %] title="[% t.name %]">[% SET p = c.in_term(t.id); IF p; THEN %]<input type="radio" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]>[% ELSE %]&nbsp;[% END %]</td>
+[%         SET count_of_terms = count_of_terms + c.number_of_terms;
+           LAST IF count_of_terms >= total_terms;
+         END -%]
 </tr>
-[% END -%]
+[%     END -%]
 </table>
-<form>
+</form>
+[%   END -%]
 [% ELSE -%]
 <p>But first you need to <a href="/register">register</a> or
 <a href="/login">log in</a>.</p>

@@ -39,15 +39,21 @@ get '/' => sub {
     my $choices = session('choices');
     session 'choices' => undef;
 
-    if (!keys %$choices and session('email')) {
-        $choices = $student_rs->find({
+    my $student;
+    if (session('email')) {
+        $student = $student_rs->find({
             email => session('email'),
-        })->choices;
+        });
+    }
+
+    if (!keys %$choices and $student) {
+        $choices = $student->choices;
     }
 
     template 'index', {
       error   => $error,
       choices => $choices,
+      student => $student,
       courses => [ $course_rs->all ],
       terms   => [ $term_rs->all ],
     };
@@ -60,21 +66,31 @@ post '/save' => sub {
 
     # Check that student has signed up for five terms
     # And that all their courses are different
+    # And that all courses are still available
     my $terms = 0;
     my %courses;
+    my @unavailable;
     foreach (keys %params) {
       my $pres = $pres_rs->find({ id => $params{$_} });
       $terms += $pres->course->number_of_terms;
       $courses{$pres->course->id} = 1;
+      push @unavailable, $pres->course->title . ' (' . $pres->term->name . ')'
+        if $pres->full;
     }
 
-    if ($terms != 5) {
-        session 'error' => 'You must register for five terms of courses';
+    if ($terms != $term_rs->count) {
+        session 'error' => 'You must register for four terms of courses';
         redirect '/';
     }
 
     if (keys %courses != keys %params) {
         session 'error' => 'You must register for a different course each term';
+        redirect '/';
+    }
+
+    if (@unavailable) {
+        session 'error', 'The following courses are full for your chosen terms:' .
+            '<ul><li>' . join('</li><li>', @unavailable) . '</li></ul>';
         redirect '/';
     }
 
@@ -134,25 +150,9 @@ post '/register' => sub {
         password => passphrase(param('password'))->generate->rfc2307,
         verify   => $verify,
     });
-
-    my $body = <<EO_EMAIL;
-
-Dear @{[$user->email]},
-
-Thank you for registering for Kinza 2014/15.
-
-Please click on the link below to verify your email address.
-
-@{[uri_for('/verify')]}/$verify
-
-EO_EMAIL
-
-    email {
-        from    => 'admin@cool-stuff.co.uk',
-        to      => $user->email,
-        subject => 'SCHS Kinza Verification',
-        body    => $body,
-    };
+    # reread from database
+    $user->discard_changes;
+    send_verify($user);
 
     template 'registered', { user => $user };
 };
@@ -172,6 +172,39 @@ get '/verify/:code' => sub {
         template 'verified';
     } else {
         template 'unverified';
+    }
+};
+
+get '/resend' => sub {
+    my $student = $student_rs->find({
+        email => session('email'),
+    });
+
+    if (!$student->verify) {
+        return template 'verified';
+    }
+
+    template 'resend', { student => $student };
+};
+
+post '/resend' => sub {
+    my $student = $student_rs->find({
+        email => session('email'),
+    });
+
+    if (!$student->verify) {
+        return template 'verified';
+    }
+
+    $student->update({
+        email => param('email'),
+    });
+    # reread from database
+    $student->discard_changes;
+    if (send_verify($student)) {
+        template 'registered', { user => $student };
+    } else {
+        template 'verified';
     }
 };
 
@@ -219,5 +252,30 @@ get '/logout' => sub {
     session 'name'  => undef;
     redirect '/';
 };
+
+sub send_verify {
+    my ($student) = @_;
+
+    return unless $student->verify;
+
+    my $body = <<EO_EMAIL;
+
+Dear @{[$student->email]},
+
+Thank you for registering for Kinza 2014/15.
+
+Please click on the link below to verify your email address.
+
+@{[uri_for('/verify')]}/@{[$student->verify]}
+
+EO_EMAIL
+
+    email {
+        from    => 'admin@cool-stuff.co.uk',
+        to      => $student->email,
+        subject => 'SCHS Kinza Verification',
+        body    => $body,
+    };
+}
 
 true;

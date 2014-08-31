@@ -1,2 +1,8 @@
+<h1>User Verified</h1>
+[%IF session.email -%]
+<p>Your registration has already been verified.</p>
+<p>You can now go to the <a href="/">home page</a> to choose your courses.</p>
+[% ELSE -%]
 <p>Your registration has been verified.</p>
 <p>You can now <a href="/login">Log In</a> using your email address.</p>
+[% END -%]

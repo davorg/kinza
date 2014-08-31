@@ -1,4 +1,7 @@
+<h1>User Verification</h1>
+[% IF NOT session.email -%]
 <p>User [% user.email %] created successfully.</p>
+[% END %]
 <p>You need to verify your email address before using the system.
 Please check your inbox and click the link in the email we have just
 sent you.</p>

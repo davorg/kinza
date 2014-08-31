@@ -145,6 +145,15 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-31 11:46:12
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cGBbek8cHZozdr3HOA6U4w
 
+sub in_term {
+  my $self = shift;
+  my ($term_id) = @_;
+
+  return $self->presentations->find({
+    term_id => $term_id,
+  });
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

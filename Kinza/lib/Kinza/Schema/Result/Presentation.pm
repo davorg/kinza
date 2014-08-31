@@ -132,6 +132,24 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ny2fOjamgxmEmAy2uwTQog
 
+sub spaces {
+  my $self = shift;
+
+  return $self->course->capacity - $self->attendances->count;
+}
+
+sub available {
+  my $self = shift;
+
+  return $self->spaces != 0;
+}
+
+sub full {
+  my $self = shift;
+
+  return ! $self->available;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
