@@ -316,7 +316,7 @@ Here is your password reset link.
 
 Please click on the link below to set a new password.
 
-@{[uri_for('/passchange')]}/$pass_code
+@{[uri_for('/passreset')]}/$pass_code
 
 EO_EMAIL
 
