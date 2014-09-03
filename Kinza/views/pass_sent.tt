@@ -1,0 +1,4 @@
+<h1>Reset Password</h1>
+
+<p>A password reset email has been sent to [% student.email %].</p>
+<p>Please click the link in that email to set a new password.</p>
