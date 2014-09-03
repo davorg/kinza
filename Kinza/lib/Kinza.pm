@@ -17,6 +17,7 @@ my $student_rs = schema()->resultset('Student');
 my $term_rs    = schema()->resultset('Term');
 my $course_rs  = schema()->resultset('Course');
 my $pres_rs    = schema()->resultset('Presentation');
+my $pass_rs    = schema()->resultset('PasswordReset');
 
 my %private = map { $_ => 1 } qw[/submit];
 
@@ -276,6 +277,114 @@ get '/logout' => sub {
   session 'email' => undef;
   session 'name'  => undef;
   redirect '/';
+};
+
+get '/password' => sub {
+  my $error = session('error');
+  session 'error' => undef;
+  template 'password', { error => $error };
+};
+
+post '/password' => sub {
+  unless (params->{email}) {
+    session 'error' => 'You must give an email address';
+    return redirect '/password';
+  }
+  my $email = params->{email};
+  my $student = $student_rs->find({
+    email => $email,
+  });
+  unless ($student) {
+    session 'error' => "$email is not a registered email address";
+    return redirect '/password';
+  }
+
+  my $pass_code = passphrase->generate_random({
+    length  => 32,
+    charset => [ 'a' .. 'z', '0' .. '9' ],
+  });
+
+  $student->add_to_password_resets({
+    code => $pass_code,
+  });
+
+  my $body = <<EO_EMAIL;
+
+Dear @{[$student->name]},
+
+Here is your password reset link.
+
+Please click on the link below to set a new password.
+
+@{[uri_for('/passchange')]}/$pass_code
+
+EO_EMAIL
+
+  email {
+    from    => 'admin@kinza.me',
+    to      => $student->email,
+    subject => 'SCHS Kinza Password Change Request',
+    body    => $body,
+  };
+
+  template 'pass_sent', { student => $student };
+};
+
+get '/passreset/:code' => sub {
+  my $code = param('code');
+  my $ps = schema->resultset('PasswordReset')->find({
+    code => $code,
+  });
+
+  unless ($ps) {
+    session 'error' => "Code '$code' is not recognised. Please try again.";
+    return redirect '/password';
+  }
+
+  session 'code' => $code;
+  template 'passreset', { code => $code };
+};
+
+post '/passreset' => sub {
+  my $code = session('code');
+
+  unless ($code) {
+    session 'error' => 'Something went wrong.';
+    redirect '/password';
+  }
+
+  my $ps = schema->resultset('PasswordReset')->find({
+    code => $code,
+  });
+
+  unless ($ps) {
+    session 'error' => "Code '$code' is not recognised. Please try again.";
+    redirect '/password';
+  }
+
+  my $error;
+  unless (param('password') and param('password2')) {
+    $error = 'You must fill in both passwords';
+  }
+
+  unless (param('password') eq param('password2')) {
+    $error = 'Password values are not the same';
+  }
+
+  if ($error) {
+    return template 'passreset', { error => $error };
+  }
+
+  schema->txn_do(sub {
+    $ps->student->update({
+      password => passphrase(param('password'))->generate->rfc2307,
+    });
+
+    $ps->delete;
+  });
+
+
+  template 'passdone';
 };
 
 sub send_verify {
