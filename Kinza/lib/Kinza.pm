@@ -81,18 +81,18 @@ post '/save' => sub {
 
   if ($terms != $term_rs->count) {
     session 'error' => 'You must register for four terms of courses';
-    redirect '/';
+    return redirect '/';
   }
 
   if (keys %courses != keys %params) {
     session 'error' => 'You must register for a different course each term';
-    redirect '/';
+    return redirect '/';
   }
 
   if (@unavailable) {
     session 'error', 'The following courses are full for your chosen terms:' .
       '<ul><li>' . join('</li><li>', @unavailable) . '</li></ul>';
-    redirect '/';
+    return redirect '/';
   }
 
   # Save the data
