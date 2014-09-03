@@ -27,7 +27,7 @@
 </thead>
 [%     FOREACH c IN courses -%]
 <tr>
-<td>[% c.title %]</td>
+<td>[% c.title %][% IF c.description %]<br><span class="small">[% c.description %]</span>[% END %]</td>
 [%       SET total_terms = terms.size;
          FOREACH t IN terms;
            SET count_of_terms = 0 -%]
