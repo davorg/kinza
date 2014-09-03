@@ -74,14 +74,14 @@ __PACKAGE__->table("course");
 =head2 capacity
 
   data_type: 'integer'
-  default_value: 20
+  default_value: 27
   is_nullable: 0
 
 =head2 number_of_terms
 
   data_type: 'integer'
   default_value: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -107,9 +107,9 @@ __PACKAGE__->add_columns(
     size => 255,
   },
   "capacity",
-  { data_type => "integer", default_value => 20, is_nullable => 0 },
+  { data_type => "integer", default_value => 27, is_nullable => 0 },
   "number_of_terms",
-  { data_type => "integer", default_value => 1, is_nullable => 1 },
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -142,8 +142,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-31 11:46:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cGBbek8cHZozdr3HOA6U4w
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-03 06:58:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FpH/F5NNuqwfjp5s0vODHg
 
 sub in_term {
   my $self = shift;
