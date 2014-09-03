@@ -14,7 +14,14 @@
 <p>To verify your email address, click the link in the email we sent you.</p>
 <p>If you haven't received your email, please
 <a href="/resend">click here</a> and we will resend it.</p>
-[%   ELSE -%]
+[%   ELSIF student.locked -%]
+<p>You have already selected your options. Your selections are:</p>
+<ul>
+[% FOREACH a IN student.sorted_attendances -%]
+<li>[% a.presentation.term.name %] - [% a.presentation.course.title %]</li>
+[% END -%]
+</ul>
+[% ELSE -%]
 <p>Here are your options:</p>
 <form method="POST" action="/save">
 <p><input type="submit" value="Save"></p>
