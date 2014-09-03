@@ -1,37 +1,37 @@
-title	description	teacher	room	capacity
-Acting	Audition only - see Mrs Evans	Mrs. Teacher	Room 101	-1
-Ancient Greek		Mrs. Teacher	Room 101	
-Anthropology		Mrs. Teacher	Room 101	
-Arabic		Mrs. Teacher	Room 101	
-Basic Chinese (Mandarin)		Mrs. Teacher	Room 101	
-Body Conditioning		Mrs. Teacher	Room 101	15
-Can’t Cook, Won’t Cook		Mrs. Teacher	Room 101	30
-Chess		Mrs. Teacher	Room 101	
-Community Art		Mrs. Teacher	Room 101	14
-First Aid – saving lives		Mrs. Teacher	Room 101	
-French Revolutions 1789-1870		Mrs. Teacher	Room 101	
-German Language and Culture		Mrs. Teacher	Room 101	
-Going Green – Beekeeping Club		Mrs. Teacher	Room 101	
-Golf		Mrs. Teacher	Room 101	20
-Historical Model Building		Mrs. Teacher	Room 101	10
-Iceland	Pupils for Iceland trip, but other pupils welcome	Mrs. Teacher	Room 101	
-Indoor Sports and Games		Mrs. Teacher	Room 101	26
-Italian Extravaganza		Mrs. Teacher	Room 101	
-Loops, Riffs and Beats		Mrs. Teacher	Room 101	16
-Magazine Journalism		Mrs. Teacher	Room 101	
-Make It Work		Mrs. Teacher	Room 101	10
-Media – Who? What? Why?		Mrs. Teacher	Room 101	
-Meditation		Mrs. Teacher	Room 101	20
-Money Management		Mrs. Teacher	Room 101	
-Origami		Mrs. Teacher	Room 101	
-Programming and Web Design		Mrs. Teacher	Room 101	25
-Quilt Making		Mrs. Teacher	Room 101	26
-Science investigations and ‘myth busters’		Mrs. Teacher	Room 101	
-Spanish Language and Culture		Mrs. Teacher	Room 101	
-Stage Combat (Introduction)		Mrs. Teacher	Room 101	14
-Stage Combat (Advanced)		Mrs. Teacher	Room 101	14
-Table Tennis		Mrs. Teacher	Room 101	16
-The Space Race		Mrs. Teacher	Room 101	
-Trampolining for beginners		Mrs. Teacher	Room 101	16
-What the Papers Say		Mrs. Teacher	Room 101	
-Wimborne House Voluntary Service Placement	Sixth Form Only	Mrs. Teacher	Room 101	
+title	description	teacher	room	capacity	number_of_terms
+Acting	Audition only - see Mrs Evans	Mrs. Teacher	Room 101	-1	1
+Ancient Greek		Mrs. Teacher	Room 101	27	1
+Anthropology		Mrs. Teacher	Room 101	27	1
+Arabic		Mrs. Teacher	Room 101	27	1
+Basic Chinese (Mandarin)		Mrs. Teacher	Room 101	27	1
+Body Conditioning		Mrs. Teacher	Room 101	15	1
+Can’t Cook, Won’t Cook		Mrs. Teacher	Room 101	30	1
+Chess		Mrs. Teacher	Room 101	27	1
+Community Art		Mrs. Teacher	Room 101	12	1
+First Aid – saving lives		Mrs. Teacher	Room 101	27	1
+French Revolutions 1789-1870		Mrs. Teacher	Room 101	27	1
+German Language and Culture		Mrs. Teacher	Room 101	27	5
+Going Green – Beekeeping Club		Mrs. Teacher	Room 101	27	1
+Golf		Mrs. Teacher	Room 101	20	1
+Historical Model Building		Mrs. Teacher	Room 101	12	1
+Iceland	Pupils for Iceland trip, but other pupils welcome	Mrs. Teacher	Room 101	27	1
+Indoor Sports and Games		Mrs. Teacher	Room 101	26	1
+Italian Extravaganza		Mrs. Teacher	Room 101	27	1
+Loops, Riffs and Beats		Mrs. Teacher	Room 101	16	1
+Magazine Journalism		Mrs. Teacher	Room 101	27	1
+Make It Work		Mrs. Teacher	Room 101	10	1
+Media – Who? What? Why?		Mrs. Teacher	Room 101	27	1
+Meditation		Mrs. Teacher	Room 101	20	1
+Money Management		Mrs. Teacher	Room 101	27	1
+Origami		Mrs. Teacher	Room 101	27	1
+Programming and Web Design		Mrs. Teacher	Room 101	25	1
+Quilt Making		Mrs. Teacher	Room 101	26	1
+Science investigations and ‘myth busters’		Mrs. Teacher	Room 101	27	1
+Spanish Language and Culture		Mrs. Teacher	Room 101	27	1
+Stage Combat (Introduction)		Mrs. Teacher	Room 101	14	1
+Stage Combat (Advanced)		Mrs. Teacher	Room 101	14	1
+Table Tennis		Mrs. Teacher	Room 101	16	1
+The Space Race		Mrs. Teacher	Room 101	27	1
+Trampolining for beginners		Mrs. Teacher	Room 101	16	1
+What the Papers Say		Mrs. Teacher	Room 101	27	1
+Wimborne House Voluntary Service Placement	Sixth Form Only	Mrs. Teacher	Room 101	27	1
