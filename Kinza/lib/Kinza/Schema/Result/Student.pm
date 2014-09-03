@@ -114,9 +114,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 password_resets
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-30 09:40:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HFxZigdFfORdN16KbKU9tg
+Type: has_many
+
+Related object: L<Kinza::Schema::Result::PasswordReset>
+
+=cut
+
+__PACKAGE__->has_many(
+  "password_resets",
+  "Kinza::Schema::Result::PasswordReset",
+  { "foreign.student_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-03 19:32:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:83EZioIV2OOEpR1u6nAfyw
 
 sub sorted_attendances {
   my $self = shift;

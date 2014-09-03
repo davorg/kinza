@@ -38,4 +38,9 @@ FOREIGN KEY (presentation_id) REFERENCES presentation(id),
 FOREIGN KEY (student_id) REFERENCES student(id)
 ) ENGINE=InnoDB;
 
-
+CREATE TABLE password_reset (
+id INTEGER PRIMARY KEY AUTO_INCREMENT,
+code VARCHAR(255),
+student_id INTEGER NOT NULL,
+FOREIGN KEY (student_id) REFERENCES student(id)
+) ENGINE=InnoDB;
