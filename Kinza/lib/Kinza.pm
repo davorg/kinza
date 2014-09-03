@@ -109,6 +109,31 @@ post '/save' => sub {
         }
     });
 
+    $student->discard_changes;
+
+    my $body = <<EO_EMAIL;
+
+Dear @{[$student->name]},
+
+Thank you for selecting your Kinza 2014/15 courses.
+
+The courses you hace chosen are as follows:
+
+EO_EMAIL
+
+    foreach ($student->sorted_attendances) {
+      $body .= '* ' . $_->presentation->term->name . ' / ' .
+        $_->presentation->course->title, "\n";
+    }
+
+    email {
+        from    => 'admin@kinza.me',
+        to      => $student->email,
+        subject => 'SCHS Kinza Selection',
+        body    => $body,
+    };
+
+
     template 'saved', { student => $student };
 };
 
@@ -260,7 +285,7 @@ sub send_verify {
 
     my $body = <<EO_EMAIL;
 
-Dear @{[$student->email]},
+Dear @{[$student->name]},
 
 Thank you for registering for Kinza 2014/15.
 
