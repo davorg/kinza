@@ -271,7 +271,7 @@ Please click on the link below to verify your email address.
 EO_EMAIL
 
     email {
-        from    => 'admin@cool-stuff.co.uk',
+        from    => 'admin@kinza.me',
         to      => $student->email,
         subject => 'SCHS Kinza Verification',
         body    => $body,
