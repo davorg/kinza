@@ -123,7 +123,7 @@ EO_EMAIL
 
     foreach ($student->sorted_attendances) {
       $body .= '* ' . $_->presentation->term->name . ' / ' .
-        $_->presentation->course->title, "\n";
+        $_->presentation->course->title . "\n";
     }
 
     email {
