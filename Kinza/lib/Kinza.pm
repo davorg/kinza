@@ -20,6 +20,9 @@ my $course_rs  = schema()->resultset('Course');
 my $pres_rs    = schema()->resultset('Presentation');
 my $pass_rs    = schema()->resultset('PasswordReset');
 
+my $now  = DateTime->now(time_zone => 'Europe/London');
+my $live = '2014-09-04T12:45';
+
 my %private = map { $_ => 1 } qw[/submit];
 
 hook before => sub {
@@ -35,7 +38,7 @@ hook before_template => sub {
 };
 
 get '/' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $error = session('error');
@@ -64,7 +67,7 @@ get '/' => sub {
 };
 
 post '/save' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my %params = params;
@@ -153,7 +156,7 @@ get '/dummies' => sub {
 };
 
 get '/register' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $error = session('error');
@@ -164,7 +167,7 @@ get '/register' => sub {
 };
 
 post '/register' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   unless (param('email')
@@ -204,7 +207,7 @@ post '/register' => sub {
 };
 
 get '/verify/:code' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $code = param('code');
@@ -225,7 +228,7 @@ get '/verify/:code' => sub {
 };
 
 get '/resend' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $student = $student_rs->find({
@@ -240,7 +243,7 @@ get '/resend' => sub {
 };
 
 post '/resend' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $student = $student_rs->find({
@@ -264,7 +267,7 @@ post '/resend' => sub {
 };
 
 get '/login' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $error = session('error');
@@ -273,7 +276,7 @@ get '/login' => sub {
 };
 
 post '/login' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   session 'email' => undef;
@@ -315,7 +318,7 @@ get '/logout' => sub {
 };
 
 get '/password' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $error = session('error');
@@ -324,7 +327,7 @@ get '/password' => sub {
 };
 
 post '/password' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   unless (params->{email}) {
@@ -372,7 +375,7 @@ EO_EMAIL
 };
 
 get '/passreset/:code' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $code = param('code');
@@ -390,7 +393,7 @@ get '/passreset/:code' => sub {
 };
 
 post '/passreset' => sub {
-  if (DateTime->now le '2014-09-04T12:45') {
+  if ($now le $live) {
     return template 'comingsoon';
   }
   my $code = session('code');
