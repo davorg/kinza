@@ -2,12 +2,13 @@
 <p>The following users are currently unverified:</p>
 <table class="table table-striped table-bordered table-hover table-condensed">
 <thead>
+<th>#</th>
 <th>Name</th>
 <th>Email</th>
 </thead>
 [% FOREACH s IN students -%]
 <tr>
-<td>[% s.name %]</td><td>[% s.email %]</td>
+<td>[% loop.count ]</td><td>[% s.name %]</td><td>[% s.email %]</td>
 </tr>
 [% END -%]
 </table>
