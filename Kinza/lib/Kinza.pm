@@ -138,6 +138,14 @@ EO_EMAIL
   template 'saved', { student => $student };
 };
 
+get '/dummies' => sub {
+  my @students = $student_rs->search({
+    verify => { '!=' => undef },
+  });
+
+  template 'dummies', { students => \@students };
+};
+
 get '/register' => sub {
   my $error = session('error');
   session 'error' => undef;
