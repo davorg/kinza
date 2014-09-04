@@ -8,7 +8,7 @@
 </thead>
 [% FOREACH s IN students -%]
 <tr>
-<td>[% loop.count ]</td><td>[% s.name %]</td><td>[% s.email %]</td>
+<td>[% loop.count %]</td><td>[% s.name %]</td><td>[% s.email %]</td>
 </tr>
 [% END -%]
 </table>
