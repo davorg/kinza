@@ -170,7 +170,7 @@ post '/register' => sub {
   if ($now le $live) {
     return template 'comingsoon';
   }
-  unless (param('email')
+  unless (param('name') and param('email')
     and param('password') and param('password2')) {
       session 'error' => 'You must fill in all values';
     return redirect '/register';
