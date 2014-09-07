@@ -64,6 +64,11 @@ __PACKAGE__->table("student");
   is_nullable: 0
   size: 255
 
+=head2 form_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 verify
 
   data_type: 'varchar'
@@ -81,6 +86,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "password",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "form_id",
+  { data_type => "integer", is_nullable => 1 },
   "verify",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -130,8 +137,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-03 19:32:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:83EZioIV2OOEpR1u6nAfyw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-07 16:26:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fWMkkeXm2GOsOwXsmSBr9g
 
 sub sorted_attendances {
   my $self = shift;
