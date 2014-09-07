@@ -3,6 +3,7 @@ use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
 use Dancer::Plugin::Email;
 use Dancer::Plugin::Passphrase;
+use DateTime;
 
 our $VERSION = '0.1';
 
@@ -19,6 +20,9 @@ my $course_rs  = schema()->resultset('Course');
 my $pres_rs    = schema()->resultset('Presentation');
 my $pass_rs    = schema()->resultset('PasswordReset');
 
+my $now  = DateTime->now(time_zone => 'Europe/London');
+my $live = '2014-09-04T12:45';
+
 my %private = map { $_ => 1 } qw[/submit];
 
 hook before => sub {
@@ -33,8 +37,10 @@ hook before_template => sub {
   $params->{email} = session('email');
 };
 
-
 get '/' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $error = session('error');
   session 'error' => undef;
   my $choices = session('choices');
@@ -61,6 +67,9 @@ get '/' => sub {
 };
 
 post '/save' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my %params = params;
 
   session 'choices' => { reverse %params };
@@ -138,7 +147,18 @@ EO_EMAIL
   template 'saved', { student => $student };
 };
 
+get '/dummies' => sub {
+  my @students = $student_rs->search({
+    verify => { '!=' => undef },
+  });
+
+  template 'dummies', { students => \@students };
+};
+
 get '/register' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $error = session('error');
   session 'error' => undef;
   template 'register', {
@@ -147,7 +167,10 @@ get '/register' => sub {
 };
 
 post '/register' => sub {
-  unless (param('email')
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
+  unless (param('name') and param('email')
     and param('password') and param('password2')) {
       session 'error' => 'You must fill in all values';
     return redirect '/register';
@@ -184,6 +207,9 @@ post '/register' => sub {
 };
 
 get '/verify/:code' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $code = param('code');
 
   my $student = $student_rs->find({
@@ -202,6 +228,9 @@ get '/verify/:code' => sub {
 };
 
 get '/resend' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $student = $student_rs->find({
     email => session('email'),
   });
@@ -214,6 +243,9 @@ get '/resend' => sub {
 };
 
 post '/resend' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $student = $student_rs->find({
     email => session('email'),
   });
@@ -235,12 +267,18 @@ post '/resend' => sub {
 };
 
 get '/login' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $error = session('error');
   session 'error' => undef;
   template 'login', { error => $error };
 };
 
 post '/login' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   session 'email' => undef;
   session 'name'  => undef;
 
@@ -280,12 +318,18 @@ get '/logout' => sub {
 };
 
 get '/password' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $error = session('error');
   session 'error' => undef;
   template 'password', { error => $error };
 };
 
 post '/password' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   unless (params->{email}) {
     session 'error' => 'You must give an email address';
     return redirect '/password';
@@ -331,6 +375,9 @@ EO_EMAIL
 };
 
 get '/passreset/:code' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $code = param('code');
   my $ps = schema->resultset('PasswordReset')->find({
     code => $code,
@@ -346,6 +393,9 @@ get '/passreset/:code' => sub {
 };
 
 post '/passreset' => sub {
+  if ($now le $live) {
+    return template 'comingsoon';
+  }
   my $code = session('code');
 
   unless ($code) {
