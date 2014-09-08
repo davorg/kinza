@@ -180,6 +180,7 @@ get '/reports/form' => sub {
            ' / ' . $a->presentation->term->name;
         }
       }
+      $csv .= "\n";
     }
   }
 
