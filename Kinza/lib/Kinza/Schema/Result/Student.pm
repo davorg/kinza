@@ -67,6 +67,7 @@ __PACKAGE__->table("student");
 =head2 form_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 verify
@@ -87,7 +88,7 @@ __PACKAGE__->add_columns(
   "password",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "form_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "verify",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -121,6 +122,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 form
+
+Type: belongs_to
+
+Related object: L<Kinza::Schema::Result::Form>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "form",
+  "Kinza::Schema::Result::Form",
+  { id => "form_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
 =head2 password_resets
 
 Type: has_many
@@ -137,8 +158,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-07 16:26:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fWMkkeXm2GOsOwXsmSBr9g
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-08 21:57:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WItYpQSEGRBD4mS7LjkZWQ
 
 sub sorted_attendances {
   my $self = shift;

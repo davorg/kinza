@@ -1,4 +1,5 @@
 package Kinza;
+use 5.010;
 use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
 use Dancer::Plugin::Email;
@@ -153,6 +154,36 @@ get '/dummies' => sub {
   });
 
   template 'dummies', { students => \@students };
+};
+
+get '/reports' => sub {
+  template 'reports';
+};
+
+get '/reports/form' => sub {
+  content_type 'text/csv';
+
+  my $csv;
+
+  foreach my $y (schema->resultset('Year')->search({}, {
+      order_by => 'id',
+    })) {
+    $csv .= $y->name . "\n";
+
+    foreach my $f ($y->forms->search({}, { order_by => 'id' })) {
+      $csv .= $f->name . "\n";
+
+      foreach my $s ($f->students->search({}, { order_by => 'name' })) {
+        $csv .= $s->name;
+        foreach my $a ($s->sorted_attendances) {
+          $csv .= ',' . $a->presentation->course->title .
+           ' / ' . $a->presentation->term->name;
+        }
+      }
+    }
+  }
+
+  return $csv;
 };
 
 get '/register' => sub {

@@ -83,6 +83,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 students
+
+Type: has_many
+
+Related object: L<Kinza::Schema::Result::Student>
+
+=cut
+
+__PACKAGE__->has_many(
+  "students",
+  "Kinza::Schema::Result::Student",
+  { "foreign.form_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 year
 
 Type: belongs_to
@@ -99,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-07 16:18:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EMHLaKP8SKqzMLixsT0NGg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-08 21:57:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tSCNpYA3zowtPu7cUYitNQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

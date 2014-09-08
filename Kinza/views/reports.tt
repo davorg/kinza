@@ -1,0 +1,5 @@
+<h1>Reports</h1>
+<p>Select a report:</p>
+<ul>
+<li><a href="/reports/form">Student choices by form</a></li>
+</ul>
