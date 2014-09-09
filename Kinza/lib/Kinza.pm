@@ -165,8 +165,7 @@ get '/reports/form' => sub {
   header 'Content-Disposition' => 'attachment; filename="form.csv"';
 
   my $csv;
-  my $terms = join ',', map { $_->name }
-    schema->resultset('Term')->all;
+  my $terms = join ',', map { $_->name } $term_rs->all;
 
   foreach my $y (schema->resultset('Year')->search({}, {
       order_by => 'id',
@@ -186,6 +185,45 @@ get '/reports/form' => sub {
       }
     $csv .= "\n";
     }
+  }
+
+  return $csv;
+};
+
+get '/reports/course' => sub {
+  content_type 'text/csv';
+  header 'Content-Disposition' => 'attachment; filename="course.csv"';
+
+  my $csv;
+
+  foreach my $p ($pres_rs->search({}, { order_by => 'id' })) {
+    $csv .= '"' . $p->course->title . '/' . $p->term->name . qq["\n];
+    foreach my $a ($p->attendances) {
+      $csv .= $a->student->name. "\n";
+    }
+    $csv .= "\n";
+  }
+
+  return $csv;
+};
+
+get '/reports/numbers' => sub {
+  content_type 'text/csv';
+  header 'Content-Disposition' => 'attachment; filename="numbers.csv"';
+
+  my $csv = "Course,T1,T2,T3,T4\n";
+  my @terms = $term_rs->all;
+
+  foreach my $c ($course_rs->search({}, { order_by => 'title' })) {
+    $csv .= '"' . $c->title . '"';
+    foreach my $t (@terms) {
+      if (my $p = $t->presentations->find({ course_id => $c->id })) {
+        $csv .= ',' . $p->attendances->count;
+      } else {
+        $csv .= ',';
+      }
+    }
+    $csv .= "\n";
   }
 
   return $csv;

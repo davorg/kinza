@@ -2,4 +2,6 @@
 <p>Select a report:</p>
 <ul>
 <li><a href="/reports/form">Student choices by form</a></li>
+<li><a href="/reports/course">Lists of students by course and term</a></li>
+<li><a href="/reports/numbers">Numbers of students per course and term</a></li>
 </ul>
