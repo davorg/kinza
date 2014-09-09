@@ -179,7 +179,7 @@ get '/reports/form' => sub {
       foreach my $s ($f->students->search({}, { order_by => 'name' })) {
         $csv .= $s->name;
         foreach my $a ($s->sorted_attendances) {
-          $csv .= ',' . $a->presentation->course->title;
+          $csv .= ',"' . $a->presentation->course->title . '"';
         }
         $csv .= "\n";
       }
