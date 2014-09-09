@@ -162,6 +162,7 @@ get '/reports' => sub {
 
 get '/reports/form' => sub {
   content_type 'text/csv';
+  header 'Content-Disposition' => 'attachment; filename="form.csv"';
 
   my $csv;
   my $terms = join ',', map { $_->name }
