@@ -164,6 +164,8 @@ get '/reports/form' => sub {
   content_type 'text/csv';
 
   my $csv;
+  my $terms = join ',', map { $_->name }
+    schema->resultset('Term')->all;
 
   foreach my $y (schema->resultset('Year')->search({}, {
       order_by => 'id',
@@ -172,15 +174,16 @@ get '/reports/form' => sub {
 
     foreach my $f ($y->forms->search({}, { order_by => 'id' })) {
       $csv .= $f->name . "\n";
+      $csv .= "Name,$terms\n";
 
       foreach my $s ($f->students->search({}, { order_by => 'name' })) {
         $csv .= $s->name;
         foreach my $a ($s->sorted_attendances) {
-          $csv .= ',' . $a->presentation->course->title .
-           ' / ' . $a->presentation->term->name;
+          $csv .= ',' . $a->presentation->course->title;
         }
+        $csv .= "\n";
       }
-      $csv .= "\n";
+    $csv .= "\n";
     }
   }
 
