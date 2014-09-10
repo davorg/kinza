@@ -141,7 +141,7 @@ sub spaces {
 sub available {
   my $self = shift;
 
-  return $self->spaces != 0;
+  return $self->spaces > 0;
 }
 
 sub full {
