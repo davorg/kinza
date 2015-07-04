@@ -21,10 +21,6 @@ charset: "UTF-8"
 # template: "simple"
 
 template: "template_toolkit"
-engines:
-  template_toolkit:
-    start_tag: '[%'
-    end_tag:   '%]'
 
 plugins:
   DBIC:
@@ -35,5 +31,9 @@ plugins:
         mysql_enable_utf8: 1
 
 session: cookie
-session_cookie_key: "random test session key"
+engines:
+  session:
+    Cookie:
+      secret_key: "random test session key"
+      default_duration: 604800
 

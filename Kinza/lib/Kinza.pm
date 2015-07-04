@@ -1,9 +1,9 @@
 package Kinza;
 use 5.010;
-use Dancer ':syntax';
-use Dancer::Plugin::DBIC;
-use Dancer::Plugin::Email;
-use Dancer::Plugin::Passphrase;
+use Dancer2;
+use Dancer2::Plugin::DBIC;
+use Dancer2::Plugin::Email;
+use Dancer2::Plugin::Passphrase;
 use DateTime;
 
 our $VERSION = '0.1';
@@ -11,7 +11,7 @@ our $VERSION = '0.1';
 $ENV{KZ_USER} && $ENV{KZ_PASS}
   or die 'Must set KZ_USER and KZ_PASS';
 
-my $cfg = setting('plugins');
+my $cfg = config->{plugins};
 $cfg->{DBIC}{default}{user}     = $ENV{KZ_USER};
 $cfg->{DBIC}{default}{password} = $ENV{KZ_PASS};
 
@@ -22,7 +22,7 @@ my $pres_rs    = schema()->resultset('Presentation');
 my $pass_rs    = schema()->resultset('PasswordReset');
 
 my $now  = DateTime->now(time_zone => 'Europe/London');
-my $live = '2014-09-04T12:45';
+my $live = '2015-09-04T12:45';
 
 my %private = map { $_ => 1 } qw[/submit];
 
