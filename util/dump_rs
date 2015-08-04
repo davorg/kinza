@@ -8,10 +8,7 @@ use FindBin;
 use lib "$FindBin::Bin/../Kinza/lib";
 use Kinza::Schema;
 
-my $sch = Kinza::Schema->connect(
-  'dbi:mysql:database=kinza', $ENV{KZ_USER}, $ENV{KZ_PASS},
-  { mysql_enable_utf8 => 1 },
-) or die "Can't connect to database";
+my $sch = Kinza::Schema->get_schema;
 
 my $rs_name = shift or die "Must give name of resultset to save\n";
 
