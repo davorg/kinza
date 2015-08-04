@@ -126,7 +126,7 @@ post '/save' => sub {
 
 Dear @{[$student->name]},
 
-Thank you for selecting your Kinza 2014/15 courses.
+Thank you for selecting your Kinza 2015/16 courses.
 
 The courses you hace chosen are as follows:
 
@@ -520,7 +520,7 @@ sub send_verify {
 
 Dear @{[$student->name]},
 
-Thank you for registering for Kinza 2014/15.
+Thank you for registering for Kinza 2015/16.
 
 Please click on the link below to verify your email address.
 
