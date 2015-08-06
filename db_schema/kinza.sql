@@ -16,8 +16,7 @@ title VARCHAR(255) NOT NULL,
 description TEXT,
 teacher VARCHAR(255) NOT NULL DEFAULT "Mrs. Teacher",
 room VARCHAR(255) NOT NULL DEFAULT "Room 101",
-capacity INTEGER NOT NULL DEFAULT 27,
-number_of_terms INTEGER NOT NULL DEFAULT 1
+capacity INTEGER NOT NULL DEFAULT 27
 ) ENGINE=InnoDB;
 
 CREATE TABLE allowed_course_year (
@@ -49,6 +48,7 @@ CREATE TABLE presentation (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
 course_id INTEGER NOT NULL,
 term_id INTEGER NOT NULL,
+number_of_terms INTEGER NOT NULL DEFAULT 1,
 FOREIGN KEY (course_id) REFERENCES course(id),
 FOREIGN KEY (term_id) REFERENCES term(id)
 ) ENGINE=InnoDB;

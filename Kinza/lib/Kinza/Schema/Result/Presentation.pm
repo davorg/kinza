@@ -58,6 +58,12 @@ __PACKAGE__->table("presentation");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 number_of_terms
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -67,6 +73,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "term_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "number_of_terms",
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -129,8 +137,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-28 20:02:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ny2fOjamgxmEmAy2uwTQog
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 21:20:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YTuKcLoRM8o+QdjfN8Lqmw
 
 sub spaces {
   my $self = shift;
