@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin '$Bin';
+use lib "$Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->get_schema;
+
+my %year;
+while (<>) {
+  chomp;
+  my @data = split /\s*,\s*/;
+  my $form = $data[0];
+  my $year = substr $form, 0, 2;
+  my $name = $data[6] || "$data[3] $data[2]";
+  push @{$year{$year}{$form}}, $name;
+}
+
+$sch->resultset('Student')->delete;
+$sch->resultset('Form')->delete;
+my $year_rs = $sch->resultset('Year');
+$year_rs->delete;
+
+foreach my $year (keys %year) {
+  my $yr_db = $year_rs->create({ name => $year });
+  foreach my $form (keys %{$year{$year}}) {
+    my $fm_db = $yr_db->add_to_forms({ name => $form });
+    foreach my $stud (@{$year{$year}{$form}}) {
+      $fm_db->add_to_students({
+        name => $stud,
+        email => '@shc.gsdt.net',
+        password => 'XXX',
+      });
+    }
+  }
+}
