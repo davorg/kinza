@@ -126,6 +126,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 allowed_course_years
+
+Type: has_many
+
+Related object: L<Kinza::Schema::Result::AllowedCourseYear>
+
+=cut
+
+__PACKAGE__->has_many(
+  "allowed_course_years",
+  "Kinza::Schema::Result::AllowedCourseYear",
+  { "foreign.course_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 presentations
 
 Type: has_many
@@ -142,8 +157,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-03 06:58:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FpH/F5NNuqwfjp5s0vODHg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 20:26:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zfp6mhkM5d09DKaXymoWzQ
 
 sub in_term {
   my $self = shift;

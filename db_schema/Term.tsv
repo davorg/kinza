@@ -1,4 +1,4 @@
-seq	name
-1	Michaelmas 2015
-2	Lent 2015
-3	Summer 2016
+code	seq	name
+M	1	Michaelmas 2015
+L	2	Lent 2016
+S	3	Summer 2016

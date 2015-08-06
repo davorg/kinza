@@ -46,6 +46,12 @@ __PACKAGE__->table("term");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 code
+
+  data_type: 'char'
+  is_nullable: 0
+  size: 1
+
 =head2 seq
 
   data_type: 'integer'
@@ -62,6 +68,8 @@ __PACKAGE__->table("term");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "code",
+  { data_type => "char", is_nullable => 0, size => 1 },
   "seq",
   { data_type => "integer", is_nullable => 0 },
   "name",
@@ -98,8 +106,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-30 14:29:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8BLaDmOCTQeq7pK/dxw1GA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 20:23:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vJSudtGulTNaHbywDmTwTg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
