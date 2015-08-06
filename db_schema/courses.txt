@@ -1,0 +1,185 @@
+﻿Acting
+L,S
+All ages
+Max 30
+
+Amnesty International
+All terms
+L5,U5,L6,U6
+Max 30
+
+Anthropology
+All terms
+U4,L5,U5,L6,U6
+Max 30
+
+Arabic
+All terms
+All ages
+Max 30
+
+Basic Chinese (Mandarin)
+M
+All ages
+Max 30
+
+Body Conditioning
+L
+All ages
+Max 20
+
+Bridge
+M
+All ages
+Max 24
+
+Can’t Cook, Won’t Cook!
+All terms
+All ages
+Max 30
+
+Ceramic Tea Party
+All terms
+All ages
+Max 30
+
+Chess
+All terms
+All ages
+Max 30
+
+Duke of Edinburgh - Bronze
+M
+L5
+0
+
+Duke of Edinburgh - Silver
+L
+U5,L6
+0
+
+Duke of Edinburgh - Gold
+S
+L6
+0
+
+
+German Language and Culture
+All terms
+All ages
+Max 30
+
+Going Green – Beekeeping Club
+All terms
+All ages
+Max 30
+
+Golf
+All terms
+All ages
+Max 10
+
+Indoor Sports and Games
+All terms
+All ages
+26
+
+Italian Extravaganza
+All terms
+L5,U5,L6,U6
+Max 30
+
+Loops, Riffs and Beats
+All terms
+All ages
+Max 15
+
+Make It Work
+All terms
+All ages
+Max 12
+
+Media – Who? What? Why?
+All terms
+All ages
+Max 30
+
+Medical Ethics
+M
+L5,U5,L6,U6
+Max 16
+
+Meditation
+All terms
+All ages
+Max 12
+
+Money Management
+All terms
+All ages
+Max 30
+
+Origami
+M,S
+All ages
+Max 30
+
+Programming and Web Design
+All terms
+All ages
+Max 30
+
+Radio and Podcast Production
+All terms
+All ages
+Max 30
+
+Robots
+M2,S1
+All ages
+Max 12
+
+Quilt making
+L,S
+All ages
+Max 16
+
+Stage Combat – Hand-to-Hand & Weaponry
+M,L
+U5,L6,U6
+Max 12
+
+Table Tennis
+All terms
+All ages
+Max 16
+
+Television Sports Broadcasting
+S
+All Ages
+Max 16
+
+The Common Room: Magazine Journalism
+All terms
+L5,U5,L6,U6
+Max 30
+
+Throwing on the potters' wheel
+All terms
+All ages
+Max 6
+
+Trampolining for beginners
+All terms
+All ages
+Max 16
+
+What the Papers Say
+All terms
+L5,U5,L6,U6
+Max 30
+
+Wimborne House Voluntary Service Placement
+M3
+L6,U6
+Max 12

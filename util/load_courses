@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin '$Bin';
+use lib "$Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->get_schema;
+
+my @courses = do { local $/ = ''; <> };
+chomp @courses;
+
+my %term;
+foreach ($sch->resultset('Term')->all) {
+  $term{$_->code} = $_;
+}
+
+my %year;
+foreach ($sch->resultset('Year')->all) {
+  $year{$_->name} = $_;
+}
+
+foreach (@courses) {
+  my %course;
+
+  @course{ qw[title terms ages max] } = split /\n/;
+  if ($course{terms} eq 'All terms') {
+    $course{terms} = [ keys %term ];
+  } else {
+    $course{terms} = [ split /\s*,\s*/, $course{terms} ];
+  }
+  if ($course{ages} eq 'All ages') {
+    $course{ages} = [ keys %year ];
+  } else {
+    $course{ages} = [ split /\s*,\s*/, $course{ages} ];
+  }
+  $course{max}   =~ s/\D+//g;
+
+  $_ = \%course;
+}
+
+my $course_rs = $sch->resultset('Course');
+
+foreach (@courses) {
+  my $crs = $course_rs->create({
+    title    => $_->{title},
+    capacity => $_->{max},
+  });
+
+  foreach my $t (@{$_->{terms}}) {
+    my $number = 1;
+    if (length $t > 1) {
+      ($t, $number) = split //, $t;
+    }
+    $crs->add_to_presentations({
+      term_id         => $term{$t}->id,
+      number_of_terms => $number,
+    });
+  }
+
+  foreach my $y (@{$_->{ages}}) {
+    next unless $year{$y};
+    $crs->add_to_allowed_course_years({
+      year_id => $year{$y}->id,
+    })
+  }
+}
