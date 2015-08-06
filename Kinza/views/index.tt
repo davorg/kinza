@@ -37,9 +37,10 @@
 <td>[% c.title %][% IF c.description %]<br><span class="small">[% c.description %]</span>[% END %]</td>
 [%       SET total_terms = terms.size;
          FOREACH t IN terms;
+           SET p = c.in_term(t.id);
            SET count_of_terms = 0 -%]
-<td colspan=[% c.number_of_terms %] title="[% t.name %]">[% SET p = c.in_term(t.id); IF p; THEN %]<input type="radio" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]>[% ELSE %]&nbsp;[% END %]</td>
-[%         SET count_of_terms = count_of_terms + c.number_of_terms;
+<td colspan=[% p.number_of_terms || 1 %] title="[% t.name %]">[% IF p; THEN %]<input type="radio" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]>[% ELSE %]&nbsp;[% END %]</td>
+[%         SET count_of_terms = count_of_terms + p.number_of_terms;
            LAST IF count_of_terms >= total_terms;
          END -%]
 </tr>

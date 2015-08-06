@@ -84,7 +84,7 @@ post '/save' => sub {
   my @unavailable;
   foreach (keys %params) {
     my $pres = $pres_rs->find({ id => $params{$_} });
-    $terms += $pres->course->number_of_terms;
+    $terms += $pres->number_of_terms;
     $courses{$pres->course->id} = 1;
     push @unavailable, $pres->course->title . ' (' . $pres->term->name . ')'
       if $pres->full;
