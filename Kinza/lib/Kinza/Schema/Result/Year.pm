@@ -109,6 +109,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 20:26:43
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Voy/j4F8FWlKmxxjtu7vwg
 
+__PACKAGE__->many_to_many(
+  'allowed_courses',
+  'allowed_course_years',
+  'course',
+);
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
