@@ -162,7 +162,7 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WItYpQSEGRBD4mS7LjkZWQ
 
 __PACKAGE__->many_to_many(
-  'presentations'
+  'presentations',
   'attendences',
   'presentation',
 );
