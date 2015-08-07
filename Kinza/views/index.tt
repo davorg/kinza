@@ -32,7 +32,7 @@
 <th title="[% t.name %]">T[% t.seq %]</th>
 [%     END -%]
 </thead>
-[%     FOREACH c IN courses -%]
+[%     FOREACH c IN student.allowed_courses -%]
 <tr>
 <td>[% c.title %][% IF c.description %]<br><span class="small">[% c.description %]</span>[% END %]</td>
 [%       SET total_terms = terms.size;
