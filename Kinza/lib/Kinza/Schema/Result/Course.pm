@@ -158,6 +158,12 @@ __PACKAGE__->many_to_many(
   'year',
 );
 
+__PACKAGE__->many_to_many(
+  'terms',
+  'presentation',
+  'term',
+);
+
 sub in_term {
   my $self = shift;
   my ($term_id) = @_;

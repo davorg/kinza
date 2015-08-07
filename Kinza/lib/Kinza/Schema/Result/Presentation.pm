@@ -140,6 +140,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 21:20:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YTuKcLoRM8o+QdjfN8Lqmw
 
+__PACKAGE__->many_to_many(
+  'students',
+  'attendance',
+  'student',
+);
+
 sub spaces {
   my $self = shift;
 
