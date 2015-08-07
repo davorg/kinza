@@ -55,16 +55,14 @@ foreach (@courses) {
     if (length $t > 1) {
       ($t, $number) = split //, $t;
     }
-    $crs->add_to_presentations({
-      term_id         => $term{$t}->id,
-      number_of_terms => $number,
-    });
+    $crs->add_to_terms(
+      $term{$t},
+      { number_of_terms => $number },
+    );
   }
 
   foreach my $y (@{$_->{ages}}) {
     next unless $year{$y};
-    $crs->add_to_allowed_course_years({
-      year_id => $year{$y}->id,
-    })
+    $crs->add_to_allowed_years( $year{$y} )
   }
 }
