@@ -152,6 +152,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 21:20:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OZOk6Ub4lvYIpB6HmsKX+w
 
+__PACKAGE__->many_to_many(
+  'allowed_years',
+  'allowed_course_years',
+  'year',
+);
+
 sub in_term {
   my $self = shift;
   my ($term_id) = @_;
