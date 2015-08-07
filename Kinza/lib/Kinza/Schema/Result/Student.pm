@@ -161,6 +161,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-08 21:57:00
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WItYpQSEGRBD4mS7LjkZWQ
 
+__PACKAGE__->many_to_many(
+  'presentations'
+  'attendences',
+  'presentation',
+);
+
 sub sorted_attendances {
   my $self = shift;
 
