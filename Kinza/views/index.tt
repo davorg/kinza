@@ -41,7 +41,7 @@
            IF ! skip_terms; THEN;
              SET p = c.in_term(t.id);
              IF p; THEN -%]
-<td class="option"[% IF p.number_of_terms > 1; THEN %] colspan=[% p.number_of_terms; END %] title="[% t.name %]"><input type="radio" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]></td>
+<td class="option"[% IF p.number_of_terms > 1; THEN %] colspan=[% p.number_of_terms; END %] title="[% t.name %]"><input type="radio" class="C[% c.id %][% FOREACH i IN [1 .. p.number_of_terms]; SET id = t.id+loop.index; ' T' _ id; END %]" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]></td>
 [%             SET skip_terms = p.number_of_terms - 1;
              ELSE -%]
 <td class="option" title="[% t.name %]">&nbsp;</td>
