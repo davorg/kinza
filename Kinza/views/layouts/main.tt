@@ -33,7 +33,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
 [% IF session.email -%]
-        <li><a>[% session.name %]</a></li>
+        <li><a>[% session.name %] ([% student.form.name %])</a></li>
         <li><a href="/logout">Log out</a></li>
 [% ELSE -%]
         <li><a href="/login">Log in</a></li>

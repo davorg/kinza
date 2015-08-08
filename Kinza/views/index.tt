@@ -22,7 +22,7 @@
 [% END -%]
 </ul>
 [% ELSE -%]
-<p>Here are your options:</p>
+<p>Here are the options available to [% student.form.year.name %]:</p>
 <form method="POST" action="/save">
 <p><input type="submit" value="Save"></p>
 <table width="100%" class="table table-striped table-bordered table-hover table-condensed">
