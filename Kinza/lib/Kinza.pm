@@ -75,7 +75,7 @@ post '/save' => sub {
 
   session 'choices' => { reverse %params };
 
-  # Check that student has signed up for five terms
+  # Check that student has signed up for all terms
   # And that all their courses are different
   # And that all courses are still available
   my $terms = 0;
