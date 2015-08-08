@@ -211,8 +211,8 @@ get '/reports/numbers' => sub {
   content_type 'text/csv';
   header 'Content-Disposition' => 'attachment; filename="numbers.csv"';
 
-  my $csv = 'Course,' . join(',', map { $_->name} $rs{Term}->all) . "\n";
   my @terms = $rs{Term}->all;
+  my $csv = 'Course,' . join(',', map { $_->name} @terms) . "\n";
 
   foreach my $c ($rs{Course}->search({}, { order_by => 'title' })) {
     $csv .= '"' . $c->title . '"';
