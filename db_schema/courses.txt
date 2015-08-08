@@ -51,17 +51,17 @@ Max 30
 Duke of Edinburgh - Bronze
 M
 L5
-0
+1000
 
 Duke of Edinburgh - Silver
 L
 U5,L6
-0
+1000
 
 Duke of Edinburgh - Gold
 S
 L6
-0
+1000
 
 
 German Language and Culture
