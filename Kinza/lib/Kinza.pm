@@ -22,12 +22,13 @@ my $pres_rs    = schema()->resultset('Presentation');
 my $pass_rs    = schema()->resultset('PasswordReset');
 
 my $now  = DateTime->now(time_zone => 'Europe/London');
-my $live = '2015-09-04T12:45';
+my $live = '2015-08-04T12:45';
 
 my %private = map { $_ => 1 } qw[/submit];
+my %open    = map { $_ => 1 } qw[/closed];
 
 hook before => sub {
-  if (request->path_info ne '/closed' and $now lt $live) {
+  if ($open{request->path_info} and $now lt $live) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
