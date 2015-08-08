@@ -15,11 +15,9 @@ my $cfg = config->{plugins};
 $cfg->{DBIC}{default}{user}     = $ENV{KZ_USER};
 $cfg->{DBIC}{default}{password} = $ENV{KZ_PASS};
 
-my $student_rs = schema()->resultset('Student');
-my $term_rs    = schema()->resultset('Term');
-my $course_rs  = schema()->resultset('Course');
-my $pres_rs    = schema()->resultset('Presentation');
-my $pass_rs    = schema()->resultset('PasswordReset');
+my %rs = map {
+  $_ => schema()->resultset($_)
+} qw[Student Term Course Presentation PasswordReset];
 
 my $now  = DateTime->now(time_zone => 'Europe/London');
 my $live = '2015-08-04T12:45';
@@ -54,7 +52,7 @@ get '/' => sub {
 
   my $student;
   if (session('email')) {
-    $student = $student_rs->find({
+    $student = $rs{Student}->find({
       email => session('email'),
     });
   }
@@ -67,8 +65,8 @@ get '/' => sub {
     error   => $error,
     choices => $choices,
     student => $student,
-    courses => [ $course_rs->all ],
-    terms   => [ $term_rs->all ],
+    courses => [ $rs{Course}->all ],
+    terms   => [ $rs{Term}->all ],
   };
 };
 
@@ -84,15 +82,15 @@ post '/save' => sub {
   my %courses;
   my @unavailable;
   foreach (keys %params) {
-    my $pres = $pres_rs->find({ id => $params{$_} });
+    my $pres = $rs{Presentation}->find({ id => $params{$_} });
     $terms += $pres->number_of_terms;
     $courses{$pres->course->id} = 1;
     push @unavailable, $pres->course->title . ' (' . $pres->term->name . ')'
       if $pres->full;
   }
 
-  if ($terms != $term_rs->count) {
-    session 'error' => 'You must register for four terms of courses';
+  if ($terms != $rs{Term}->count) {
+    session 'error' => 'You must register for three terms of courses';
     return redirect '/';
   }
 
@@ -108,7 +106,7 @@ post '/save' => sub {
   }
 
   # Save the data
-  my $student = $student_rs->find({
+  my $student = $rs{Student}->find({
     email => session('email'),
   });
 
@@ -151,7 +149,7 @@ EO_EMAIL
 };
 
 get '/dummies' => sub {
-  my @students = $student_rs->search({
+  my @students = $rs{Student}->search({
     verify => { '!=' => undef },
   });
 
@@ -167,7 +165,7 @@ get '/reports/form' => sub {
   header 'Content-Disposition' => 'attachment; filename="form.csv"';
 
   my $csv;
-  my $terms = join ',', map { $_->name } $term_rs->all;
+  my $terms = join ',', map { $_->name } $rs{Term}->all;
 
   foreach my $y (schema->resultset('Year')->search({}, {
       order_by => 'id',
@@ -198,7 +196,7 @@ get '/reports/course' => sub {
 
   my $csv;
 
-  foreach my $p ($pres_rs->search({}, { order_by => 'id' })) {
+  foreach my $p ($rs{Presentation}->search({}, { order_by => 'id' })) {
     $csv .= '"' . $p->course->title . '/' . $p->term->name . qq["\n];
     foreach my $a ($p->attendances) {
       $csv .= $a->student->name. "\n";
@@ -213,10 +211,10 @@ get '/reports/numbers' => sub {
   content_type 'text/csv';
   header 'Content-Disposition' => 'attachment; filename="numbers.csv"';
 
-  my $csv = "Course,T1,T2,T3,T4\n";
-  my @terms = $term_rs->all;
+  my $csv = 'Course,' . join(',', map { $_->name} $rs{Term}->all) . "\n";
+  my @terms = $rs{Term}->all;
 
-  foreach my $c ($course_rs->search({}, { order_by => 'title' })) {
+  foreach my $c ($rs{Course}->search({}, { order_by => 'title' })) {
     $csv .= '"' . $c->title . '"';
     foreach my $t (@terms) {
       if (my $p = $t->presentations->find({ course_id => $c->id })) {
@@ -251,7 +249,7 @@ post '/register' => sub {
     return redirect '/register';
   }
 
-  if (my $user = $student_rs->find({
+  if (my $user = $rs{Student}->find({
     email => param('email'),
   })) {
     session 'error' => 'Email ' . $user->email .
@@ -263,7 +261,7 @@ post '/register' => sub {
     length  => 32,
     charset => [ 'a' .. 'z', '0' .. '9' ],
   });
-  my $user = $student_rs->create({
+  my $user = $rs{Student}->create({
     name     => param('name'),
     email    => param('email'),
     password => passphrase(param('password'))->generate->rfc2307,
@@ -279,7 +277,7 @@ post '/register' => sub {
 get '/verify/:code' => sub {
   my $code = param('code');
 
-  my $student = $student_rs->find({
+  my $student = $rs{Student}->find({
     verify => $code,
   });
 
@@ -295,7 +293,7 @@ get '/verify/:code' => sub {
 };
 
 get '/resend' => sub {
-  my $student = $student_rs->find({
+  my $student = $rs{Student}->find({
     email => session('email'),
   });
 
@@ -307,7 +305,7 @@ get '/resend' => sub {
 };
 
 post '/resend' => sub {
-  my $student = $student_rs->find({
+  my $student = $rs{Student}->find({
     email => session('email'),
   });
 
@@ -342,7 +340,7 @@ post '/login' => sub {
     return redirect '/login';
   }
 
-  my $user = $student_rs->find({
+  my $user = $rs{Student}->find({
     email => params->{email},
   });
   unless ($user) {
@@ -384,7 +382,7 @@ post '/password' => sub {
     return redirect '/password';
   }
   my $email = params->{email};
-  my $student = $student_rs->find({
+  my $student = $rs{Student}->find({
     email => $email,
   });
   unless ($student) {
