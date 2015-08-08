@@ -27,7 +27,7 @@ my $live = '2015-09-04T12:45';
 my %private = map { $_ => 1 } qw[/submit];
 
 hook before => sub {
-  if ($now lt $live) {
+  if (request->path_info ne '/closed' and $now lt $live) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
