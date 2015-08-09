@@ -173,22 +173,40 @@ get '/register' => sub {
 };
 
 post '/register' => sub {
-  unless (param('name') and param('email')
-    and param('password') and param('password2')) {
-      session 'error' => 'You must fill in all values';
+  my ($email, $pass1, $pass2);
+
+  session 'error', undef;
+
+  unless ($email = param('email')
+    and $pass1 = param('password') and $pass2 = param('password2')) {
+    session 'error' => 'You must fill in all values';
     return redirect '/register';
   }
 
-  unless (param('password') eq param('password2')) {
+  warn "EMAIL: '$email'";
+
+  if ($email !~ /\@schs\.gdst\.net$/) {
+    warn "REGEX FAIL " . ($email !~ /\@schs\.gdst\.net$/);
+    session 'error' => "You must use your \@schs.gdst.net email address";
+    return redirect '/register';
+  }
+
+  unless ($pass1 eq $pass2) {
     session 'error' => 'Password values are not the same';
     return redirect '/register';
   }
 
-  if (my $user = $rs{Student}->find({
-    email => param('email'),
-  })) {
-    session 'error' => 'Email ' . $user->email .
-      ' is already registered.';
+  my $user = $rs{Student}->find({
+    email => $email,
+  });
+
+  if (!$user) {
+    session 'error' => "Email address $email is unknown.";
+    return redirect '/register';
+  }
+
+  if ($user->password) {
+    session 'error', "email is already registered.";
     return redirect '/register';
   }
 
@@ -196,12 +214,11 @@ post '/register' => sub {
     length  => 32,
     charset => [ 'a' .. 'z', '0' .. '9' ],
   });
-  my $user = $rs{Student}->create({
-    name     => param('name'),
-    email    => param('email'),
-    password => passphrase(param('password'))->generate->rfc2307,
+  $user->update({
+    password => passphrase($pass1)->generate->rfc2307,
     verify   => $verify,
   });
+
   # reread from database
   $user->discard_changes;
   send_verify($user);
