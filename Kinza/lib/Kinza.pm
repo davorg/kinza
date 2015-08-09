@@ -6,7 +6,11 @@ use Dancer2::Plugin::Email;
 use Dancer2::Plugin::Passphrase;
 use DateTime;
 
+use Kinza::Reports;
+
 our $VERSION = '0.1';
+
+prefix undef;
 
 $ENV{KZ_USER} && $ENV{KZ_PASS}
   or die 'Must set KZ_USER and KZ_PASS';
@@ -157,76 +161,7 @@ get '/dummies' => sub {
 };
 
 get '/reports' => sub {
-  template 'reports';
-};
-
-get '/reports/form' => sub {
-  content_type 'text/csv';
-  header 'Content-Disposition' => 'attachment; filename="form.csv"';
-
-  my $csv;
-  my $terms = join ',', map { $_->name } $rs{Term}->all;
-
-  foreach my $y (schema->resultset('Year')->search({}, {
-      order_by => 'id',
-    })) {
-    $csv .= $y->name . "\n";
-
-    foreach my $f ($y->forms->search({}, { order_by => 'id' })) {
-      $csv .= $f->name . "\n";
-      $csv .= "Name,$terms\n";
-
-      foreach my $s ($f->students->search({}, { order_by => 'name' })) {
-        $csv .= $s->name;
-        foreach my $a ($s->sorted_attendances) {
-          $csv .= ',"' . $a->presentation->course->title . '"';
-        }
-        $csv .= "\n";
-      }
-    $csv .= "\n";
-    }
-  }
-
-  return $csv;
-};
-
-get '/reports/course' => sub {
-  content_type 'text/csv';
-  header 'Content-Disposition' => 'attachment; filename="course.csv"';
-
-  my $csv;
-
-  foreach my $p ($rs{Presentation}->search({}, { order_by => 'id' })) {
-    $csv .= '"' . $p->course->title . '/' . $p->term->name . qq["\n];
-    foreach my $a ($p->attendances) {
-      $csv .= $a->student->name. "\n";
-    }
-    $csv .= "\n";
-  }
-
-  return $csv;
-};
-
-get '/reports/numbers' => sub {
-  content_type 'text/csv';
-  header 'Content-Disposition' => 'attachment; filename="numbers.csv"';
-
-  my @terms = $rs{Term}->all;
-  my $csv = 'Course,' . join(',', map { $_->name} @terms) . "\n";
-
-  foreach my $c ($rs{Course}->search({}, { order_by => 'title' })) {
-    $csv .= '"' . $c->title . '"';
-    foreach my $t (@terms) {
-      if (my $p = $t->presentations->find({ course_id => $c->id })) {
-        $csv .= ',' . $p->attendances->count;
-      } else {
-        $csv .= ',';
-      }
-    }
-    $csv .= "\n";
-  }
-
-  return $csv;
+  return redirect '/reports/';
 };
 
 get '/register' => sub {
