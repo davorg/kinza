@@ -5,6 +5,7 @@ use Dancer2::Plugin::DBIC;
 use Dancer2::Plugin::Email;
 use Dancer2::Plugin::Passphrase;
 use DateTime;
+use DateTime::Format::Strptime;
 
 use Kinza::Reports;
 
@@ -12,8 +13,12 @@ our $VERSION = '0.1';
 
 prefix undef;
 
-$ENV{KZ_USER} && $ENV{KZ_PASS}
-  or die 'Must set KZ_USER and KZ_PASS';
+my @envs = qw[ KZ_USER KZ_PASS KZ_HOST KZ_DOMAIN KZ_OPEN ];
+
+if (my @missing = grep { ! defined $ENV{$_} } @envs) {
+  die 'You must set ', join(', ', @missing[0 .. $#missing - 1]),
+      (@missing > 1 ? ' and ' : ''), $missing[-1];
+}
 
 my $cfg = config->{plugins};
 $cfg->{DBIC}{default}{user}     = $ENV{KZ_USER};
@@ -23,14 +28,19 @@ my %rs = map {
   $_ => schema()->resultset($_)
 } qw[Student Term Course Presentation PasswordReset];
 
+my $dt_p = DateTime::Format::Strptime->new(
+  pattern   => '%Y-%m-%dT%H:%M',
+  time_zone => 'Europe/London',
+  on_error  => 'croak',
+);
 my $now  = DateTime->now(time_zone => 'Europe/London');
-my $live = '2015-08-04T12:45';
+my $live = $dt_p->parse_datetime($ENV{KZ_OPEN});
 
 my %private = map { $_ => 1 } qw[/submit];
 my %open    = map { $_ => 1 } qw[/closed];
 
 hook before => sub {
-  if ($open{request->path_info} and $now lt $live) {
+  if (! $open{request->path_info} and $now < $live) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
@@ -41,7 +51,8 @@ hook before => sub {
 
 hook before_template => sub {
   my $params = shift;
-  $params->{email} = session('email');
+  $params->{email}  = session('email');
+  $params->{domain} = $ENV{KZ_DOMAIN};
 };
 
 get '/closed' => sub {
@@ -183,11 +194,8 @@ post '/register' => sub {
     return redirect '/register';
   }
 
-  warn "EMAIL: '$email'";
-
-  if ($email !~ /\@schs\.gdst\.net$/) {
-    warn "REGEX FAIL " . ($email !~ /\@schs\.gdst\.net$/);
-    session 'error' => "You must use your \@schs.gdst.net email address";
+  if ($email !~ /\@\Q$ENV{KZ_DOMAIN}/) {
+    session 'error' => "You must use your \@$ENV{KZ_DOMAIN} email address";
     return redirect '/register';
   }
 
