@@ -53,6 +53,7 @@ hook before_template => sub {
   my $params = shift;
   $params->{email}  = session('email');
   $params->{domain} = $ENV{KZ_DOMAIN};
+  $params->{live}   = $live;
 };
 
 get '/closed' => sub {
