@@ -26,7 +26,7 @@ $cfg->{DBIC}{default}{password} = $ENV{KZ_PASS};
 
 my %rs = map {
   $_ => schema()->resultset($_)
-} qw[Student Term Course Presentation PasswordReset];
+} qw[Year Student Term Course Presentation PasswordReset];
 
 my $dt_p = DateTime::Format::Strptime->new(
   pattern   => '%Y-%m-%dT%H:%M',
@@ -437,6 +437,10 @@ post '/passreset' => sub {
 
 
   template 'passdone';
+};
+
+get '/years' => sub {
+  template 'years', { years => $rs{Year} };
 };
 
 sub send_verify {
