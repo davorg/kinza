@@ -37,7 +37,7 @@ my $now  = DateTime->now(time_zone => 'Europe/London');
 my $live = $dt_p->parse_datetime($ENV{KZ_OPEN});
 
 my %private = map { $_ => 1 } qw[/submit];
-my %open    = map { $_ => 1 } qw[/closed];
+my %open    = map { $_ => 1 } qw[/closed /years /reports];
 
 hook before => sub {
   if (! $open{request->path_info} and $now < $live) {
