@@ -52,6 +52,12 @@ __PACKAGE__->table("year");
   is_nullable: 1
   size: 255
 
+=head2 seq
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -59,6 +65,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "seq",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -106,8 +114,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-06 20:26:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Voy/j4F8FWlKmxxjtu7vwg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-06 12:52:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cPiWh4/c7g5f4JaSmlGc6g
 
 __PACKAGE__->many_to_many(
   'allowed_courses',
