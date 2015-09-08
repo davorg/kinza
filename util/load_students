@@ -20,13 +20,13 @@ while (<>) {
   push @{$year{$year}{$form}}, $name;
 }
 
-$sch->resultset('Student')->delete;
-$sch->resultset('Form')->delete;
+#$sch->resultset('Student')->delete;
+#$sch->resultset('Form')->delete;
 my $year_rs = $sch->resultset('Year');
-$year_rs->delete;
+#$year_rs->delete;
 
 foreach my $year (keys %year) {
-  my $yr_db = $year_rs->create({ name => $year });
+  my $yr_db = $year_rs->find_or_create({ name => $year });
   foreach my $form (keys %{$year{$year}}) {
     my $fm_db = $yr_db->add_to_forms({ name => $form });
     foreach my $stud (@{$year{$year}{$form}}) {
