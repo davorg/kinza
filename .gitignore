@@ -1,3 +1,5 @@
 kinza.dump
 */kinza.dump
 db_schema/*.tsv
+*.csv
+db_schema/*.csv
