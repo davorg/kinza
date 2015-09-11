@@ -1,0 +1,4 @@
+<h1>SCHS Kinza 2015/16</h1>
+<p>Please come back later to make your selections.</p>
+<p>We open for selections on
+[% sel_live.strftime('%A %d %B %Y, at %H:%M') %].</p>
