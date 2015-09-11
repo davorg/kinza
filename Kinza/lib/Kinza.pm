@@ -13,7 +13,8 @@ our $VERSION = '0.1';
 
 prefix undef;
 
-my @envs = qw[ KZ_USER KZ_PASS KZ_HOST KZ_DOMAIN KZ_OPEN ];
+my @envs = qw[ KZ_USER KZ_PASS KZ_HOST
+               KZ_DOMAIN KZ_REG_OPEN KZ_SEL_OPEN ];
 
 if (my @missing = grep { ! defined $ENV{$_} } @envs) {
   die 'You must set ', join(', ', @missing[0 .. $#missing - 1]),
@@ -33,14 +34,15 @@ my $dt_p = DateTime::Format::Strptime->new(
   time_zone => 'Europe/London',
   on_error  => 'croak',
 );
-my $now  = DateTime->now(time_zone => 'Europe/London');
-my $live = $dt_p->parse_datetime($ENV{KZ_OPEN});
+my $now      = DateTime->now(time_zone => 'Europe/London');
+my $reg_live = $dt_p->parse_datetime($ENV{KZ_REG_OPEN});
+my $sel_live = $dt_p->parse_datetime($ENV{KZ_SEL_OPEN});
 
 my %private = map { $_ => 1 } qw[/submit];
 my %open    = map { $_ => 1 } qw[/closed /years /reports];
 
 hook before => sub {
-  if (! $open{request->path_info} and $now < $live) {
+  if (! $open{request->path_info} and $now < $reg_live) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
@@ -53,7 +55,8 @@ hook before_template => sub {
   my $params = shift;
   $params->{email}  = session('email');
   $params->{domain} = $ENV{KZ_DOMAIN};
-  $params->{live}   = $live;
+  $params->{reg_live} = $reg_live;
+  $params->{sel_live} = $sel_live;
 };
 
 get '/closed' => sub {
@@ -61,6 +64,9 @@ get '/closed' => sub {
 };
 
 get '/' => sub {
+  if ($now < $sel_live) {
+    return template 'sel_closed';
+  }
   my $error = session('error');
   session 'error' => undef;
   my $choices = session('choices');
