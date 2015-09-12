@@ -457,6 +457,14 @@ get '/years' => sub {
   template 'years', { years => $rs{Year} };
 };
 
+get '/courses' => sub {
+  template 'courses', {
+    courses => $rs{Course},
+    years   => $rs{Year},
+    terms   => $rs{Term},
+  };
+};
+
 sub send_verify {
   my ($student) = @_;
 
