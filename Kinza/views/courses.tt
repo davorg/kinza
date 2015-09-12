@@ -1,0 +1,23 @@
+<table class="table table-bordered table-hover">
+<tr><th>Title</th><th>Years</th><th>Terms</th></tr>
+[% FOREACH course IN courses.all.sort('title') -%]
+<tr><th>[% course.title %]</th>
+[% course_years = [];
+   FOREACH year IN years.all.sort('seq');
+     IF course.allowed_for_year(year.name);
+       course_years.push(year.name);
+     ELSE;
+       course_years.push('X');
+     END;
+   END -%]
+<td>[% course_years.join(' / ') %]</td>
+[% course_terms = [];
+   FOREACH term IN terms.all.sort('seq');
+     pres = course.in_term(term.id);
+     IF pres;
+       course_terms.push(term.name _ ' (' _ (pres.attendances.count || 0) _ ')');
+     END;
+   END -%]
+<td>[% course_terms.join('<br>') %]</td></tr>
+[% END -%]
+</table>

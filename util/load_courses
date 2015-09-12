@@ -42,7 +42,11 @@ foreach (@courses) {
   $_ = \%course;
 }
 
-my $course_rs = $sch->resultset('Course');
+my $course_rs =  $sch->resultset('Course');
+$sch->resultset('AllowedCourseYear')->delete;
+$sch->resultset('Attendance')->delete;
+$sch->resultset('Presentation')->delete;
+$course_rs->delete;
 
 foreach (@courses) {
   my $crs = $course_rs->create({

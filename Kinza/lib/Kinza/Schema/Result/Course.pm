@@ -177,3 +177,10 @@ sub in_term {
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
+
+sub allowed_for_year {
+  my $self = shift;
+  my $year = shift;
+
+  return $self->allowed_years->search({ 'year.name' => $year })->count;
+}
