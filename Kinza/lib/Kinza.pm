@@ -57,6 +57,13 @@ hook before_template => sub {
   $params->{domain} = $ENV{KZ_DOMAIN};
   $params->{reg_live} = $reg_live;
   $params->{sel_live} = $sel_live;
+  if (session('email')) {
+    $params->{student} = $rs{Student}->find({
+      email => session('email')
+    });
+  } else {
+    delete $params->{student};
+  }
 };
 
 get '/closed' => sub {
@@ -64,7 +71,7 @@ get '/closed' => sub {
 };
 
 get '/' => sub {
-  if ($now < $sel_live) {
+  if (session('name') and $now < $sel_live) {
     return template 'sel_closed';
   }
   my $error = session('error');
@@ -221,7 +228,8 @@ post '/register' => sub {
   }
 
   if ($user->password) {
-    session 'error', "email is already registered.";
+    session 'error', $user->name . ' (' . $user->email . ') is already registered.'
+            . '<br>Please <a href="/login">log in</a> instead.</p>';
     return redirect '/register';
   }
 
