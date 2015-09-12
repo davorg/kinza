@@ -1,7 +1,8 @@
 <table class="table table-bordered table-hover">
-<tr><th>Title</th><th>Years</th><th>Terms</th></tr>
+<tr><th>Title</th><th>Places</th><th>Years</th><th>Terms</th></tr>
 [% FOREACH course IN courses.all.sort('title') -%]
-<tr><th>[% course.title %]</th>
+<tr><th width="30%">[% course.title %]</th>
+<td>[% course.capacity %]</td>
 [% course_years = [];
    FOREACH year IN years.all.sort('seq');
      IF course.allowed_for_year(year.name);
