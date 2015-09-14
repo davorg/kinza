@@ -202,7 +202,7 @@ post '/register' => sub {
 
   session 'error', undef;
 
-  unless ($email = param('email')
+  unless ($email = lc param('email')
     and $pass1 = param('password') and $pass2 = param('password2')) {
     session 'error' => 'You must fill in all values';
     return redirect '/register';
@@ -289,7 +289,7 @@ post '/resend' => sub {
   }
 
   $student->update({
-    email => param('email'),
+    email => lc param('email'),
   });
   # reread from database
   $student->discard_changes;
@@ -316,7 +316,7 @@ post '/login' => sub {
   }
 
   my $user = $rs{Student}->find({
-    email => params->{email},
+    email => lc params->{email},
   });
   unless ($user) {
     session 'error' => 'Invalid email or password';
@@ -356,7 +356,7 @@ post '/password' => sub {
     session 'error' => 'You must give an email address';
     return redirect '/password';
   }
-  my $email = params->{email};
+  my $email = lc params->{email};
   my $student = $rs{Student}->find({
     email => $email,
   });
