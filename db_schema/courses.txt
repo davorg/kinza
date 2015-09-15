@@ -41,7 +41,7 @@ Max 30
 Ceramic Tea Party
 All terms
 All ages
-Max 30
+Max 24
 
 Chess
 All terms
@@ -49,20 +49,14 @@ All ages
 Max 30
 
 Duke of Edinburgh - Bronze
-M
+M,L
 L5
-1000
-
-Duke of Edinburgh - Silver
-L
-U5,L6
-1000
+30
 
 Duke of Edinburgh - Gold
 S
-L6
-1000
-
+L6,U6
+40
 
 German Language and Culture
 All terms
@@ -90,7 +84,7 @@ L5,U5,L6,U6
 Max 30
 
 Loops, Riffs and Beats
-All terms
+S
 All ages
 Max 15
 
