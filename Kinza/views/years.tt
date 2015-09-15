@@ -9,9 +9,9 @@ END -%]
 
 <table class="table table-bordered table-hover">
 [% FOREACH year IN years.all.sort('seq') -%]
-<tr><th colspan="4"><h2>[% year.name %]</h2></th></tr>
+<tr><th colspan="5"><h2>[% year.name %]</h2></th></tr>
 [%   FOREACH form IN year.forms.sort('name') -%]
-<tr><th colspan="4"><h3>[% form.name %]</h3></th></tr>
+<tr><th colspan="5"><h3>[% form.name %]</h3></th></tr>
 <tr><th>Name</th><th>Email</th><th>Registered</th><th>Verified</th><th>Selected</th></td>
 [%     FOREACH student IN form.students.sort('name') -%]
 <tr><td>[% student.name %]</td><td>[% student.email %]</td>
