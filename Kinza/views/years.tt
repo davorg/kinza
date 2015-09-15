@@ -15,8 +15,8 @@ END -%]
 <tr><th>Name</th><th>Email</th><th>Registered</th><th>Verified</th><th>Selected</th></td>
 [%     FOREACH student IN form.students.sort('name') -%]
 <tr><td>[% student.name %]</td><td>[% student.email %]</td>
-<td>[% ok(student.password) %]</td>
-<td>[% ok(student.password AND NOT student.verify) %]</td>
+<td>[% ok(student.is_registered) %]</td>
+<td>[% ok(student.is_verified) %]</td>
 <td>[% ok(student.locked) %]</td></tr>
 [%     END -%]
 [%   END -%]
