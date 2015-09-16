@@ -27,8 +27,8 @@
     </div>
   </div>
   <div class="col-sm-offset-2 col-sm-4">
-    <span class="small"><a href="/password">Forgotten password</a>  </span>
-    <span class="small">Or perhaps you need to <a href="/register">register</a> first</span>
+    <span class="small"><a href="/password">Forgotten password</a>.<br> 
+    Or perhaps you need to <a href="/register">register</a> first</span>
   </div>
 </form>
 
