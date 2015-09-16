@@ -26,7 +26,7 @@
       <button type="submit" class="btn btn-default">Log in</button>
     </div>
   </div>
-  <div class="col-sm-offset-2 col-sm-4">
+  <div class="col-sm-offset-2 col-sm-5">
     <span class="small"><a href="/password">Forgotten password</a>.<br> 
     Or perhaps you need to <a href="/register">register</a> first</span>
   </div>
