@@ -42,7 +42,7 @@ my %private = map { $_ => 1 } qw[/submit];
 my %open    = map { $_ => 1 } qw[/closed /years /reports];
 
 hook before => sub {
-  if (! $open{request->path_info} and $now < $reg_live) {
+  if (! $open{request->path_info}) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
