@@ -194,6 +194,18 @@ sub allowed_courses {
   return $self->form->year->allowed_courses;
 }
 
+sub is_registered {
+  my $self = shift;
+
+  return length $self->password;
+}
+
+sub is_verified {
+  my $self = shift;
+
+  return $self->is_registered && ! $self->verify;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
