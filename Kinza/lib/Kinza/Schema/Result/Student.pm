@@ -171,7 +171,7 @@ sub sorted_attendances {
   my $self = shift;
 
   return $self->attendances->search({}, {
-    join => { presentation => 'term' },
+    prefetch => { presentation => ['term', 'course'] },
     order_by => 'term.seq',
   });
 }
