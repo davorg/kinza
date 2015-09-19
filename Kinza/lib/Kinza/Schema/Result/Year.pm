@@ -123,6 +123,18 @@ __PACKAGE__->many_to_many(
   'course',
 );
 
+sub get_allowed_courses {
+  my $self = shift;
+
+  return $self->allowed_courses({}, {
+    prefetch => { presentations => 'term' },
+    join => {presentations => 'attendances' },
+    '+select' => { count =>  'attendances.id' },
+    '+as' => [ 'att_count' ],
+    group_by => [ 'course.id', 'presentations.id' ],
+  });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

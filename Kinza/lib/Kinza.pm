@@ -38,11 +38,15 @@ my $now      = DateTime->now(time_zone => 'Europe/London');
 my $reg_live = $dt_p->parse_datetime($ENV{KZ_REG_OPEN});
 my $sel_live = $dt_p->parse_datetime($ENV{KZ_SEL_OPEN});
 
-my %private = map { $_ => 1 } qw[/submit];
-my %open    = map { $_ => 1 } qw[/closed /years /reports];
+my %private  = map { $_ => 1 } qw[/submit];
+my %open     = map { $_ => 1 } qw[/closed /years /reports];
+my %reg_open = (%open, map { $_ => 1 } qw[/register]);
 
 hook before => sub {
-  if (! $open{request->path_info}) {
+  if ($now < $reg_live && ! $open{request->path_info}) {
+    forward '/closed';
+  }
+  if (session('name') && $now < $sel_live && ! $open{request->path_info}) {
     forward '/closed';
   }
   if ($private{request->path_info} and ! session('user')) {
@@ -67,13 +71,14 @@ hook before_template => sub {
 };
 
 get '/closed' => sub {
-  return template 'comingsoon';
+  if ($now < $reg_live) {
+    return template 'comingsoon';
+  } else {
+    return template 'sel_closed';
+  }
 };
 
 get '/' => sub {
-  if (session('name') and $now < $sel_live) {
-    return template 'sel_closed';
-  }
   my $error = session('error');
   session 'error' => undef;
   my $choices = session('choices');
@@ -90,12 +95,25 @@ get '/' => sub {
     $choices = $student->choices;
   }
 
+  my @terms = $rs{Term}->search({}, {
+    prefetch => { presentations => 'attendances' },
+    order_by => 'seq',
+  })->all;
+
+  my %term_course;
+  foreach my $t (@terms) {
+    foreach my $p ($t->presentations) {
+      $term_course{$t->id}{$p->course_id} = $p;
+    }
+  }
+
   template 'index', {
     error   => $error,
     choices => $choices,
     student => $student,
     courses => [ $rs{Course}->all ],
-    terms   => [ $rs{Term}->all ],
+    terms   => \@terms,
+    term_course => \%term_course,
   };
 };
 

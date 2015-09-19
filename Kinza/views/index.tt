@@ -32,14 +32,15 @@
 <th width="22%">[% t.name %]</th>
 [%     END -%]
 </thead>
-[%     FOREACH c IN student.allowed_courses -%]
+[%     SET year = student.form.year;
+       FOREACH c IN year.get_allowed_courses -%]
 <tr>
 <td>[% c.title %][% IF c.description %]<br><span class="small">[% c.description %]</span>[% END %]</td>
 [%       SET total_terms = terms.size;
          SET skip_terms = 0;
          FOREACH t IN terms;
            IF ! skip_terms; THEN;
-             SET p = c.in_term(t.id);
+             SET p = term_course.${t.id}.${c.id};
              IF p; THEN -%]
 <td class="option"[% IF p.number_of_terms > 1; THEN %] colspan=[% p.number_of_terms; END %] title="[% t.name %]"><input type="radio" class="C[% c.id %][% FOREACH i IN [1 .. p.number_of_terms]; SET id = t.id+loop.index; ' T' _ id; END %]" name="T[% p.term.seq %]" value="[% p.id %]"[% IF choices.${p.id} %] checked[% ELSIF p.full %] disabled[% END %]></td>
 [%             SET skip_terms = p.number_of_terms - 1;
