@@ -61,11 +61,15 @@ hook before_template => sub {
   $params->{domain} = $ENV{KZ_DOMAIN};
   $params->{reg_live} = $reg_live;
   $params->{sel_live} = $sel_live;
-  if (session('email')) {
+  if (session('email') and ! $params->{student}) {
     $params->{student} = $rs{Student}->find({
       email => session('email')
+    }, {
+      prefetch => { form => 'year' },
     });
-  } else {
+  }
+
+  if (!session('email')) {
     delete $params->{student};
   }
 };
@@ -88,6 +92,8 @@ get '/' => sub {
   if (session('email')) {
     $student = $rs{Student}->find({
       email => session('email'),
+    }, {
+      prefetch => [{ attendances => 'presentation' }, { form => 'year' } ],
     });
   }
 
@@ -96,7 +102,7 @@ get '/' => sub {
   }
 
   my @terms = $rs{Term}->search({}, {
-    prefetch => { presentations => 'attendances' },
+    prefetch => { presentations => ['course', 'attendances'] },
     order_by => 'seq',
   })->all;
 
@@ -111,7 +117,6 @@ get '/' => sub {
     error   => $error,
     choices => $choices,
     student => $student,
-    courses => [ $rs{Course}->all ],
     terms   => \@terms,
     term_course => \%term_course,
   };
@@ -128,8 +133,14 @@ post '/save' => sub {
   my $terms = 0;
   my %courses;
   my @unavailable;
-  foreach (keys %params) {
-    my $pres = $rs{Presentation}->find({ id => $params{$_} });
+
+  my @pres = $rs{Presentation}->search({
+    'me.id' => [ values %params],
+  }, {
+    prefetch => [ 'course', 'term', 'attendances' ],
+  });
+
+  foreach my $pres (@pres) {
     $terms += $pres->number_of_terms;
     $courses{$pres->course->id} = 1;
     push @unavailable, $pres->course->title . ' (' . $pres->term->name . ')'
