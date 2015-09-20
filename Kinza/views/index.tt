@@ -12,6 +12,9 @@
 [%   IF student.verify -%]
 <p>You need to verify your email address before using this site.</p>
 <p>To verify your email address, click the link in the email we sent you.</p>
+<p>Currently, the school email server is not accepting email from this web
+site. If you ask for the email to <a href="/resend">be resent</a> then you
+will be able to change the email address to a non-school one.</p>
 <p>If you haven't received your email, please
 <a href="/resend">click here</a> and we will resend it.</p>
 [%   ELSIF student.locked -%]
