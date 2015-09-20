@@ -149,7 +149,7 @@ __PACKAGE__->many_to_many(
 sub spaces {
   my $self = shift;
 
-  return $self->course->capacity - $self->attendances->count;
+  return $self->course->capacity - $self->number;
 }
 
 sub available {
@@ -164,6 +164,11 @@ sub full {
   return ! $self->available;
 }
 
+sub number {
+  my $self = shift;
+
+  return $self->attendances->count;
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

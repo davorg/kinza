@@ -16,7 +16,7 @@
    FOREACH term IN terms.all.sort('seq');
      pres = course.in_term(term.id);
      IF pres;
-       course_terms.push(term.name _ ' (' _ (pres.attendances.count || 0) _ ')');
+       course_terms.push(term.name _ ' (' _ (pres.number || 0) _ ')');
      END;
    END -%]
 <td>[% course_terms.join('<br>') %]</td></tr>
