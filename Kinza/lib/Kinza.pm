@@ -39,7 +39,9 @@ my $reg_live = $dt_p->parse_datetime($ENV{KZ_REG_OPEN});
 my $sel_live = $dt_p->parse_datetime($ENV{KZ_SEL_OPEN});
 
 my %private  = map { $_ => 1 } qw[/submit];
-my %open     = map { $_ => 1, "$_/" => 1 } qw[/closed /years /reports /courses];
+my %open     = map { $_ => 1, "$_/" => 1 }
+  qw[/closed /years /reports /courses
+     /reports/form /reports/course /reports/numbers];
 my %reg_open = (%open, map { $_ => 1 } qw[/register]);
 
 hook before => sub {
