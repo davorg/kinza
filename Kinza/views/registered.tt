@@ -5,3 +5,8 @@
 <p>You need to verify your email address before using the system.
 Please check your inbox and click the link in the email we have just
 sent you.</p>
+<p><b>Note:</b> Currently the SCHS email system is not accepting email
+from this web site, therefore verification emails are not getting through to
+these addresses. Therefore, you should go to the
+<a href="/resend">resend</a> to get the verification email resent to an
+alternative email address.</p>
