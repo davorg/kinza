@@ -3,6 +3,8 @@
 <p>Press the button below to resend the verification email to
 [% student.email %].</p>
 <p>You can change the email address before sending the email.</p>
+<p><b>Note:</b> If you change your email address, then you will need to use
+this new email address to log in to the site in the future.</p>
 <form method="POST" action="/resend">
 <div class="form-group">
 <label for="email" class="col-sm-2 control-label">Email:</label>
