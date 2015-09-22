@@ -1,0 +1,62 @@
+#!/usr/bin/perl -CS
+
+use strict;
+use warnings;
+use 5.010;
+
+use FindBin;
+use lib "$FindBin::Bin/../Kinza/lib";
+use Kinza::Schema;
+
+my $sch = Kinza::Schema->get_schema;
+
+my %rs;
+for (qw[Student Course Term]) {
+  $rs{$_} = $sch->resultset($_);
+}
+
+my $file = shift || 'Kinza-Choices.tsv';
+
+open my $fh, '<', $file or die $!;
+
+my @terms = qw[M L S];
+
+while (<$fh>) {
+  chomp;
+  my ($name, %c);
+  ($name, @c{@terms}) = split /\t/;
+
+  my $s = find_in('Student', 'name', $name);
+  foreach my $t_name (@terms) {
+    next unless $c{$t_name};
+    my $c = find_in('Course', 'title', $c{$t_name});
+    next unless $c;
+    my $t = find_in('Term', 'code', $t_name);
+    my $p = $c->in_term($t->id);
+    unless ($p) {
+      warn "No presentation of $c{$t_name} in $t_name\n";
+      next;
+    }
+    $s->add_to_attendances({
+      presentation_id => $p->id,
+    });
+  }
+}
+
+sub find_in {
+  my ($rs_name, $column, $val) = @_;
+
+  my $thing_rs = $rs{$rs_name}->search({ $column => { like => "$val%" } });
+
+  unless ($thing_rs->count) {
+    warn "Can't find $rs_name with $column $val\n";
+    return;
+  }
+
+  if ($thing_rs->count != 1) {
+    warn "More than one $rs_name with $column $val\n";
+    return;
+  }
+
+  return $thing_rs->first;
+}
