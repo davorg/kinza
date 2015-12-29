@@ -27,7 +27,7 @@ get '/form' => sub {
   header 'Content-Disposition' => 'attachment; filename="form.csv"';
 
   my $csv;
-  my $terms = join ',', map { $_->name } $rs{Term}->all;
+  my $terms = join ',', map { $_->name } $rs{Term}->search({}, { order_by => 'seq' })->all;
 
   foreach my $y (schema->resultset('Year')->search({}, {
       order_by => 'id',
@@ -40,9 +40,12 @@ get '/form' => sub {
 
       foreach my $s ($f->students->search({}, { order_by => 'name' })) {
         $csv .= $s->name;
+        my $term_seq = 1;
         foreach my $a ($s->sorted_attendances) {
-          for (1 .. $a->presentation->number_of_terms) {
+          if ($a->presentation->term->seq == $term_seq++) {
             $csv .= ',"' . $a->presentation->course->title . '"';
+          } else {
+            $csv .= ',';
           }
         }
         $csv .= "\n";
