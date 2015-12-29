@@ -41,7 +41,9 @@ get '/form' => sub {
       foreach my $s ($f->students->search({}, { order_by => 'name' })) {
         $csv .= $s->name;
         foreach my $a ($s->sorted_attendances) {
-          $csv .= ',"' . $a->presentation->course->title . '"';
+          for (1 .. $a->presentation->number_of_terms) {
+            $csv .= ',"' . $a->presentation->course->title . '"';
+          }
         }
         $csv .= "\n";
       }
