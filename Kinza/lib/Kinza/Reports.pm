@@ -46,6 +46,7 @@ get '/form' => sub {
             $csv .= ',"' . $a->presentation->course->title . '"';
           } else {
             $csv .= ',';
+            redo;
           }
         }
         $csv .= "\n";
