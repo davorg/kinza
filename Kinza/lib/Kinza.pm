@@ -37,6 +37,7 @@ my $dt_p = DateTime::Format::Strptime->new(
 my $now      = DateTime->now(time_zone => 'Europe/London');
 my $reg_live = $dt_p->parse_datetime($ENV{KZ_REG_OPEN});
 my $sel_live = $dt_p->parse_datetime($ENV{KZ_SEL_OPEN});
+my $closed   = $dt_p->parse_datetime($ENV{KZ_CLOSED});
 
 my %private  = map { $_ => 1 } qw[/submit];
 my %open     = map { $_ => 1, "$_/" => 1 }
@@ -45,6 +46,9 @@ my %open     = map { $_ => 1, "$_/" => 1 }
 my %reg_open = (%open, map { $_ => 1 } qw[/register]);
 
 hook before => sub {
+  if ($now > $closed && ! $open{request->path_info}) {
+    forward '/closed';
+  }
   if ($now < $reg_live && ! $open{request->path_info}) {
     forward '/closed';
   }
@@ -77,7 +81,9 @@ hook before_template => sub {
 };
 
 get '/closed' => sub {
-  if ($now < $reg_live) {
+  if ($now > $closed) {
+    return template 'closed';
+  } elsif ($now < $reg_live) {
     return template 'comingsoon';
   } else {
     return template 'sel_closed';
